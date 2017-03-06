@@ -39,6 +39,7 @@ public class MediumEnemy : Enemy
 
     void Start()
     {
+        Init();
         hasMinions = (UnityEngine.Random.value <= .1f) ? true : false;
         InitMinions();
     }

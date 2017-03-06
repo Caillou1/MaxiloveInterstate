@@ -29,9 +29,6 @@ public class SpawnManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-    }
-
-    void Start () {
 
         tf = transform;
         wave = 0;

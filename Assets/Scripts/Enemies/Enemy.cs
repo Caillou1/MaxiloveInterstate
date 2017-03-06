@@ -39,7 +39,7 @@ public abstract class Enemy : MonoBehaviour {
     private ParticleSystem Hit;
     private ParticleSystem Pacification;
 
-    void Awake () {
+    void Start () {
         Init();
 	}
 
