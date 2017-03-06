@@ -6,7 +6,7 @@ using UnityEngine;
 public class SmallEnemy : Enemy {
     protected override void Shot(bool ignoreRandom)
     {
-        if(CanFire && tf.position.y > -0.8f)
+        if(CanFire && tf.position.y > .5f)
         {
             Vector3 diff = tf.position - GameObject.FindGameObjectWithTag("Player").transform.position;
             diff.Normalize();
