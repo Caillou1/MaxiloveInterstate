@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ScrollBehaviour : MonoBehaviour {
-    public static float Speed = 10f;
+    public static float Speed = 5f;
 
     private bool CanMove = true;
     private Transform tf;
