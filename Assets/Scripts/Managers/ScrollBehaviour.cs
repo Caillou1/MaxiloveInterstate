@@ -20,7 +20,7 @@ public class ScrollBehaviour : MonoBehaviour {
 	void Update () {
         if (CanMove)
         {
-            tf.Translate(Vector3.down * Time.deltaTime * Speed);
+            tf.Translate(Vector3.up * Time.deltaTime * Speed);
         }
 	}
 }
