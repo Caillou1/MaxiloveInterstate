@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public abstract class Enemy : MonoBehaviour {
     public float LifePoints;
@@ -10,7 +11,6 @@ public abstract class Enemy : MonoBehaviour {
     public int Money;
     public float DropLifeChance;
     public float FireRate = .001f;
-    public GameObject Life;
     public GameObject Bullet;
     public Texture PeaceTexture;
     public float MinimumTimeBetweenShots = 1f;
@@ -39,6 +39,8 @@ public abstract class Enemy : MonoBehaviour {
     private ParticleSystem Hit;
     private ParticleSystem Pacification;
 
+    private GameObject[] PowerUps;
+
     void Start () {
         Init();
 	}
@@ -57,17 +59,30 @@ public abstract class Enemy : MonoBehaviour {
         gameManager = GameObject.Find("Manager").GetComponent<GameManager>();
 
         var graphs = tf.FindChild("Graphs");
-
-        Trail = graphs.FindChild("Trail").GetComponent<ParticleSystem>();
-        TrailPeace = graphs.FindChild("TrailPeace").GetComponent<ParticleSystem>();
-        Hit = graphs.FindChild("Hit").GetComponent<ParticleSystem>();
-        Pacification = graphs.FindChild("Peace").GetComponent<ParticleSystem>();
-
+        if (graphs != null)
+        {
+            Trail = graphs.FindChild("Trail").GetComponent<ParticleSystem>();
+            TrailPeace = graphs.FindChild("TrailPeace").GetComponent<ParticleSystem>();
+            Hit = graphs.FindChild("Hit").GetComponent<ParticleSystem>();
+            Pacification = graphs.FindChild("Peace").GetComponent<ParticleSystem>();
+        } else
+        {
+            Trail = tf.FindChild("Trail").GetComponent<ParticleSystem>();
+            TrailPeace = tf.FindChild("TrailPeace").GetComponent<ParticleSystem>();
+            Hit = tf.FindChild("Hit").GetComponent<ParticleSystem>();
+            Pacification = tf.FindChild("Peace").GetComponent<ParticleSystem>();
+        }
         var tmp = tf.GetComponentsInChildren<MeshRenderer>();
         InitialsMaterial = new Material[tmp.Length];
         for(int i = 0; i<tmp.Length; i++)
         {
             InitialsMaterial[i] = tmp[i].material;
+        }
+
+        var tt = AssetDatabase.LoadAllAssetsAtPath("Assets/Prefabs/Bonus");
+        for(int i = 0; i<tt.Length; i++)
+        {
+            PowerUps[i] = (GameObject)tt[i];
         }
 
         StartCoroutine(Fire());
@@ -122,7 +137,6 @@ public abstract class Enemy : MonoBehaviour {
         Pacification.transform.parent = null;
         Pacification.GetComponent<Rigidbody>().velocity = Vector3.up * 5;
         Pacification.transform.position = tf.position;
-        Debug.Log("Pacification : " + Pacification.transform.position + "\nEnemy : " + tf.position);
 
         gameManager.AddScore(Score);
         gameManager.AddMoney(Money);
@@ -151,7 +165,7 @@ public abstract class Enemy : MonoBehaviour {
     {
         if(Random.value <= DropLifeChance)
         {
-            Instantiate(Life, tf.position - new Vector3(0, 0, 0.1f), Quaternion.identity);
+            Instantiate(PowerUps[Random.Range(0, PowerUps.Length)], tf.position - new Vector3(0, 0, 0.1f), Quaternion.identity);
         }
     }
 

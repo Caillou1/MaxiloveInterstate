@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class PropertyManager : MonoBehaviour
 {
     public float[] SplitFragments;
@@ -26,22 +27,22 @@ public class PropertyManager : MonoBehaviour
 
     public void UpgradeSplit()
     {
-
+        Debug.Log("Not implemented");
     }
 
     public void UpgradeExplosive()
     {
-
+        Debug.Log("Not implemented");
     }
 
     public void UpgradePiercing()
     {
-
+        Debug.Log("Not implemented");
     }
 
     public void UpgradeHoming()
     {
-
+        Debug.Log("Not implemented");
     }
 
     public void EnableSplit(bool b) {
