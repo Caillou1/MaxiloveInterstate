@@ -3,15 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ScrollBehaviour : MonoBehaviour {
-    public float Speed = 10f;
+    public static float Speed = 10f;
 
+    private bool CanMove = true;
     private Transform tf;
 
 	void Start () {
         tf = transform;
 	}
+
+    public void SetCanMove(bool b)
+    {
+        CanMove = b;
+    }
 	
 	void Update () {
-        tf.Translate(Vector3.down * Time.deltaTime * Speed);
+        if (CanMove)
+        {
+            tf.Translate(Vector3.down * Time.deltaTime * Speed);
+        }
 	}
 }

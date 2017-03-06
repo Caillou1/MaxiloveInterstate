@@ -55,6 +55,11 @@ public class SoundManager : MonoBehaviour
         Source = GetComponent<AudioSource>();
     }
 
+    public void SetPitch()
+    {
+        Source.pitch = Time.timeScale;
+    }
+
     public void PlayOneShot(AudioClip shot)
     {
         Source.PlayOneShot(shot);

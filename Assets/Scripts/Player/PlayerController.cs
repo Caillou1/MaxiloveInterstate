@@ -100,7 +100,10 @@ public class PlayerController : MonoBehaviour {
             {
                 isFiring = true;
                 if (!IsPaused && Ralenti)
+                {
                     Time.timeScale = 1; // DOVirtual.Float(Time.timeScale, 1f, 1f, (float t) => Time.timeScale = t);
+                    //SoundManager.Instance.SetPitch();
+                }
             }
             float from = pos.x;
             float to = cam.ScreenToWorldPoint(new Vector3(Input.touches[0].position.x, tf.position.y, 10)).x;
@@ -116,7 +119,10 @@ public class PlayerController : MonoBehaviour {
             {
                 isFiring = true;
                 if (!IsPaused && Ralenti)
+                {
                     Time.timeScale = 1; // DOVirtual.Float(Time.timeScale, 1f, 1f, (float t) => Time.timeScale = t);
+                    //SoundManager.Instance.SetPitch();
+                }
             }
             float from = pos.x;
             float to = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, tf.position.y, 10)).x;
@@ -133,6 +139,7 @@ public class PlayerController : MonoBehaviour {
                 if (!IsPaused && Ralenti)
                 {
                     Time.timeScale = ValeurRalenti;
+                    //SoundManager.Instance.SetPitch();
                     StartCoroutine(TriggerScaleUp());
                 }
             }
@@ -225,8 +232,8 @@ public class PlayerController : MonoBehaviour {
                 StartCoroutine(Invulnerability());
                 SoundManager.Instance.PlayPickLife();
                 AmplitudeData.Instance.LifePicked++;
-                LifePoints += o.LifePoint;
-                LifePoints = Mathf.Min(LifePoints, MaxLifePoints);
+                LifePoints = Mathf.Min(LifePoints + o.LifePoint, MaxLifePoints);
+                Lives[LifePoints-1].enabled = true;
                 Destroy(other.gameObject);
             }
         }
