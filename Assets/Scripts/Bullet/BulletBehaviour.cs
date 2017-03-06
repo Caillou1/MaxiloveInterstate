@@ -146,7 +146,7 @@ public class BulletBehaviour : MonoBehaviour
 
                 for (int i = 0; i < NumberOfFragment; i++)
                 {
-                    var bb = Instantiate(gameObject, tf.position, Quaternion.Euler(0, 0, Random.Range(0, 360))).GetComponent<BulletBehaviour>();
+                    var bb = Instantiate(gameObject, tf.position, Quaternion.Euler(0, 0, Random.Range(-90, 90))).GetComponent<BulletBehaviour>();
                     bb.SetFragment(true);
                     bb.StopHomingCoroutine();
                     if (isFragment)

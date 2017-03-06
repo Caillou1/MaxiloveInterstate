@@ -36,7 +36,7 @@ public class ScrollManager : MonoBehaviour {
 
     IEnumerator SpawnChunk()
     {
-        yield return new WaitUntil(() => FirstSpawnedChunk.transform.position.y <= -2 * ChunkSize);
+        yield return new WaitUntil(() => FirstSpawnedChunk.transform.position.y >= ChunkSize);
         FirstSpawnedChunk.transform.position = new Vector3(100, 100, 100);
         FirstSpawnedChunk.GetComponent<ScrollBehaviour>().SetCanMove(false);
         SpawnedChunks.Add(FirstSpawnedChunk);
@@ -46,7 +46,7 @@ public class ScrollManager : MonoBehaviour {
         var l_tmp = LastSpawnedChunk;
 
         LastSpawnedChunk = SpawnedChunks[Random.Range(0, SpawnedChunks.Count)].gameObject;
-        LastSpawnedChunk.transform.position = new Vector3(0, l_tmp.transform.position.y + 8, 0);
+        LastSpawnedChunk.transform.position = new Vector3(0, l_tmp.transform.position.y - 8, 0);
         LastSpawnedChunk.GetComponent<ScrollBehaviour>().SetCanMove(true);
 
         ActiveChunks.Add(LastSpawnedChunk);
