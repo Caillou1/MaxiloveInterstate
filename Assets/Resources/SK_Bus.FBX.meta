@@ -6,11 +6,28 @@ ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
+    100002: B_Body
+    100004: B_FLWheel
+    100006: B_FRWheel
+    100008: B_Master
+    100010: Sk_Bus001
     400000: //RootNode
+    400002: B_Body
+    400004: B_FLWheel
+    400006: B_FRWheel
+    400008: B_Master
+    400010: Sk_Bus001
     2300000: //RootNode
     3300000: //RootNode
     4300000: Sk_Bus
     4300002: Sk_Bus001
+    7400000: A_Bus_turnR
+    7400002: A_Bus_turnL
+    7400004: A_Bus_RToF
+    7400006: A_Bus_LtoF
+    7400008: A_Bus_F
+    9500000: //RootNode
+    13700000: Sk_Bus001
   materials:
     importMaterials: 0
     materialName: 0
@@ -25,13 +42,213 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
-    animationCompression: 1
+    animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: A_Bus_turnR
+      takeName: Take 001
+      firstFrame: 10
+      lastFrame: 15
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: B_Master
+        weight: 1
+      - path: B_Master/B_Body
+        weight: 1
+      - path: B_Master/B_FLWheel
+        weight: 1
+      - path: B_Master/B_FRWheel
+        weight: 1
+      - path: Sk_Bus001
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: A_Bus_turnL
+      takeName: Take 001
+      firstFrame: 30
+      lastFrame: 35
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: B_Master
+        weight: 1
+      - path: B_Master/B_Body
+        weight: 1
+      - path: B_Master/B_FLWheel
+        weight: 1
+      - path: B_Master/B_FRWheel
+        weight: 1
+      - path: Sk_Bus001
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: A_Bus_RToF
+      takeName: Take 001
+      firstFrame: 50
+      lastFrame: 64
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: B_Master
+        weight: 1
+      - path: B_Master/B_Body
+        weight: 1
+      - path: B_Master/B_FLWheel
+        weight: 1
+      - path: B_Master/B_FRWheel
+        weight: 1
+      - path: Sk_Bus001
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: A_Bus_LtoF
+      takeName: Take 001
+      firstFrame: 70
+      lastFrame: 84
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: B_Master
+        weight: 1
+      - path: B_Master/B_Body
+        weight: 1
+      - path: B_Master/B_FLWheel
+        weight: 1
+      - path: B_Master/B_FRWheel
+        weight: 1
+      - path: Sk_Bus001
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: A_Bus_F
+      takeName: Take 001
+      firstFrame: 85
+      lastFrame: 90
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: B_Master
+        weight: 1
+      - path: B_Master/B_Body
+        weight: 1
+      - path: B_Master/B_FLWheel
+        weight: 1
+      - path: B_Master/B_FRWheel
+        weight: 1
+      - path: Sk_Bus001
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
@@ -54,7 +271,7 @@ ModelImporter:
     normalSmoothAngle: 60
     normalImportMode: 1
     tangentImportMode: 3
-  importAnimation: 0
+  importAnimation: 1
   copyAvatar: 0
   humanDescription:
     serializedVersion: 2
@@ -73,7 +290,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
+  animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
