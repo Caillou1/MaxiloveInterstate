@@ -60,6 +60,7 @@ public abstract class Enemy : MonoBehaviour {
         TrailPeace = tf.FindChild("TrailPeace").GetComponent<ParticleSystem>();
         Hit = tf.FindChild("Hit").GetComponent<ParticleSystem>();
         Pacification = tf.FindChild("Peace").GetComponent<ParticleSystem>();
+        
 
         var tmp = tf.GetComponentsInChildren<MeshRenderer>();
         InitialsMaterial = new Material[tmp.Length];
