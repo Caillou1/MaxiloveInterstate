@@ -86,6 +86,7 @@ public class SpawnManager : MonoBehaviour
 
     IEnumerator WaitForEmptyScreen()
     {
+        yield return new WaitUntil(() => EnemiesOnScreen.Count != 0);
         yield return new WaitUntil(() => EnemiesOnScreen.Count == 0);
         yield return new WaitForSeconds(1);
         Spawn();
