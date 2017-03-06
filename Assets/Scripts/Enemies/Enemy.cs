@@ -55,22 +55,21 @@ public abstract class Enemy : MonoBehaviour {
         StartCoroutine(MoveToScreen());
         StartCoroutine(DecreaseScore());
         gameManager = GameObject.Find("Manager").GetComponent<GameManager>();
-
-<<<<<<< HEAD
-        Trail = tf.FindChild("Trail").GetComponent<ParticleSystem>();
-        TrailPeace = tf.FindChild("TrailPeace").GetComponent<ParticleSystem>();
-        Hit = tf.FindChild("Hit").GetComponent<ParticleSystem>();
-        Pacification = tf.FindChild("Peace").GetComponent<ParticleSystem>();
         
-=======
         var graphs = tf.FindChild("Graphs");
-
-        Trail = graphs.FindChild("Trail").GetComponent<ParticleSystem>();
-        TrailPeace = graphs.FindChild("TrailPeace").GetComponent<ParticleSystem>();
-        Hit = graphs.FindChild("Hit").GetComponent<ParticleSystem>();
-        Pacification = graphs.FindChild("Peace").GetComponent<ParticleSystem>();
->>>>>>> refs/remotes/origin/PierreProg
-
+        if (graphs != null)
+        {
+            Trail = graphs.FindChild("Trail").GetComponent<ParticleSystem>();
+            TrailPeace = graphs.FindChild("TrailPeace").GetComponent<ParticleSystem>();
+            Hit = graphs.FindChild("Hit").GetComponent<ParticleSystem>();
+            Pacification = graphs.FindChild("Peace").GetComponent<ParticleSystem>();
+        } else
+        {
+            Trail = tf.FindChild("Trail").GetComponent<ParticleSystem>();
+            TrailPeace = tf.FindChild("TrailPeace").GetComponent<ParticleSystem>();
+            Hit = tf.FindChild("Hit").GetComponent<ParticleSystem>();
+            Pacification = tf.FindChild("Peace").GetComponent<ParticleSystem>();
+        }
         var tmp = tf.GetComponentsInChildren<MeshRenderer>();
         InitialsMaterial = new Material[tmp.Length];
         for(int i = 0; i<tmp.Length; i++)
