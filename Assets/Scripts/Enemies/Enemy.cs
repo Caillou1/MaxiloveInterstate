@@ -57,7 +57,7 @@ public abstract class Enemy : MonoBehaviour {
         StartCoroutine(MoveToScreen());
         StartCoroutine(DecreaseScore());
         gameManager = GameObject.Find("Manager").GetComponent<GameManager>();
-
+        
         var graphs = tf.FindChild("Graphs");
         if (graphs != null)
         {

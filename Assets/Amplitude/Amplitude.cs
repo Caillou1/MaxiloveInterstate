@@ -166,8 +166,8 @@ public class Amplitude {
 
 	protected void Log(string message) {
 		if(!logging) return;
-        
-		//Debug.Log(message);
+
+		Debug.Log(message);
 	}
 
 	public void init(string apiKey) {
