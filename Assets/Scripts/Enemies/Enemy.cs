@@ -39,7 +39,7 @@ public abstract class Enemy : MonoBehaviour {
     private ParticleSystem Hit;
     private ParticleSystem Pacification;
 
-    void Awake () {
+    void Start () {
         Init();
 	}
 
@@ -56,11 +56,20 @@ public abstract class Enemy : MonoBehaviour {
         StartCoroutine(DecreaseScore());
         gameManager = GameObject.Find("Manager").GetComponent<GameManager>();
 
+<<<<<<< HEAD
         Trail = tf.FindChild("Trail").GetComponent<ParticleSystem>();
         TrailPeace = tf.FindChild("TrailPeace").GetComponent<ParticleSystem>();
         Hit = tf.FindChild("Hit").GetComponent<ParticleSystem>();
         Pacification = tf.FindChild("Peace").GetComponent<ParticleSystem>();
         
+=======
+        var graphs = tf.FindChild("Graphs");
+
+        Trail = graphs.FindChild("Trail").GetComponent<ParticleSystem>();
+        TrailPeace = graphs.FindChild("TrailPeace").GetComponent<ParticleSystem>();
+        Hit = graphs.FindChild("Hit").GetComponent<ParticleSystem>();
+        Pacification = graphs.FindChild("Peace").GetComponent<ParticleSystem>();
+>>>>>>> refs/remotes/origin/PierreProg
 
         var tmp = tf.GetComponentsInChildren<MeshRenderer>();
         InitialsMaterial = new Material[tmp.Length];
@@ -117,8 +126,11 @@ public abstract class Enemy : MonoBehaviour {
         TrailPeace.Play(true);
         Pacification.Play(true);
         Destroy(Pacification.gameObject, 5);
+        Pacification.transform.localPosition = Vector3.zero;
         Pacification.transform.parent = null;
-        Pacification.GetComponent<Rigidbody>().velocity = Vector3.down * 10;
+        Pacification.GetComponent<Rigidbody>().velocity = Vector3.up * 5;
+        Pacification.transform.position = tf.position;
+        Debug.Log("Pacification : " + Pacification.transform.position + "\nEnemy : " + tf.position);
 
         gameManager.AddScore(Score);
         gameManager.AddMoney(Money);
@@ -257,7 +269,7 @@ public abstract class Enemy : MonoBehaviour {
 
     IEnumerator CheckOnScreen()
     {
-        yield return new WaitUntil(() => (tf.position.y > 10 || tf.position.y < -2) || (tf.position.x < -5 || tf.position.x > 5));
+        yield return new WaitUntil(() => (tf.position.y > 10 || tf.position.y < -3) || (tf.position.x < -5 || tf.position.x > 5));
         Peace();
     }
 
@@ -272,7 +284,7 @@ public abstract class Enemy : MonoBehaviour {
             rb.velocity += Vector3.left;
 
 
-        rb.velocity *= MovementSpeed;
+        rb.velocity *= MovementSpeed*2;
 
         yield return new WaitForEndOfFrame();
         if (tf.position.y > 6 || (tf.position.x <= -3 || tf.position.x >= 3))
