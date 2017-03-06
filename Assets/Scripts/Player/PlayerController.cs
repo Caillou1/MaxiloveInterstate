@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour {
         ScreenSup = WeaponUI.rect.height * par.scaleFactor;
         ScreenInf = Screen.height - PauseUI.rect.height * par.scaleFactor - 50;
 
-        //StartCoroutine(WaitForLowFPS());
+        StartCoroutine(WaitForLowFPS());
     }
 
     IEnumerator WaitForLowFPS()
