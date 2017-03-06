@@ -1,0 +1,2 @@
+Si tout fonctionne correctement, il suffit de mettre le script ScaleModulator sur le gameobject dont on souhaite faire varier l'échelle et renseigner les variables dans l'inspecteur.
+Les prefabs contiennent des valeurs que j'ai trouvées intéressantes pour le "tap screen to start" du début et le bonus de score
