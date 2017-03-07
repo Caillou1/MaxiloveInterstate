@@ -74,8 +74,6 @@ public class PlayerController : MonoBehaviour {
         RainbowTrail = tf.FindChild("TrailRB").GetComponent<LineRenderer>();
         Hit = tf.FindChild("Hit").GetComponent<ParticleSystem>();
         Destruction = tf.FindChild("Destruction").GetComponent<ParticleSystem>();
-        var par = WeaponUI.parent.GetComponent<Canvas>();
-        ScreenSup = WeaponUI.rect.height * par.scaleFactor;
         BusTex = tf.FindChild("Mesh").transform.FindChild("Sk").GetComponent<SkinnedMeshRenderer>();
         FPSText = GameObject.Find("_FPSTEXT_").GetComponent<Text>();
         highpassVan = GetComponent<AudioHighPassFilter>();
