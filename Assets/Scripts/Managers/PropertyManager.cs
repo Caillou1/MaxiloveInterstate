@@ -56,10 +56,10 @@ public class PropertyManager : MonoBehaviour
 
     private void UpdateToggles()
     {
-        Numbers[0].text = ""+AmmoProperties.SplitNb;
-        Numbers[1].text = ""+AmmoProperties.ExplosiveNb;
-        Numbers[2].text = ""+AmmoProperties.PiercingNb;
-        Numbers[3].text = ""+AmmoProperties.HomingNb;
+        //Numbers[0].text = ""+AmmoProperties.SplitNb;
+        //Numbers[1].text = ""+AmmoProperties.ExplosiveNb;
+        //Numbers[2].text = ""+AmmoProperties.PiercingNb;
+        //Numbers[3].text = ""+AmmoProperties.HomingNb;
 
         if (AmmoProperties.SplitNb > 0)
         {

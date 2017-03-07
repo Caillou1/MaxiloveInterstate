@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour {
     public float InvulnerabilityTime;
     public bool Ralenti;
     public float ValeurRalenti;
+    public Texture PoliceTex;
 
     private bool CanBeHurt;
     private int MaxLifePoints;
@@ -33,6 +34,7 @@ public class PlayerController : MonoBehaviour {
     private LineRenderer RainbowTrail;
     private ParticleSystem Hit;
     private ParticleSystem Destruction;
+    private SkinnedMeshRenderer BusTex;
 
     private float ScreenSup;
     private float ScreenInf;
@@ -41,8 +43,10 @@ public class PlayerController : MonoBehaviour {
     public RectTransform PauseUI;
 
     public bool IsPaused = false;
+    public bool ShowFPS = true;
 
     public Image[] Lives;
+    private Text FPSText;
 
     public static PlayerController Instance;
 
@@ -69,7 +73,8 @@ public class PlayerController : MonoBehaviour {
         var par = WeaponUI.parent.GetComponent<Canvas>();
         ScreenSup = WeaponUI.rect.height * par.scaleFactor;
         ScreenInf = Screen.height - PauseUI.rect.height * par.scaleFactor - 50;
-
+        BusTex = tf.FindChild("Mesh").transform.FindChild("Sk").GetComponent<SkinnedMeshRenderer>();
+        FPSText = GameObject.Find("_FPSTEXT_").GetComponent<Text>();
         StartCoroutine(WaitForLowFPS());
     }
 
@@ -94,6 +99,11 @@ public class PlayerController : MonoBehaviour {
 
     void Update ()
     {
+        if(ShowFPS)
+        {
+            FPSText.text = "FPS : "+(1.0f / Time.smoothDeltaTime);
+        }
+
         if (CanMove && Input.touches.Length > 0 && Input.touches[0].position.y > ScreenSup && Input.touches[0].position.y < ScreenInf) 
         {
             if (!isFiring) 
@@ -192,12 +202,13 @@ public class PlayerController : MonoBehaviour {
 
     IEnumerator GameOver()
     {
+        BusTex.material.mainTexture = PoliceTex;
         Ralenti = false;
         Destruction.Play(true);
         Trail.Stop(true);
         RainbowTrail.enabled = false;
         CanMove = false;
-        Render.enabled = false;
+        //Render.enabled = false;
         SoundManager.Instance.PlayDeath();
         PlayerPrefs.SetInt("BestScore", Mathf.Max(gameManager.GetScore(), PlayerPrefs.GetInt("BestScore", 0)));
         PlayerPrefs.SetInt("Money", PlayerPrefs.GetInt("Money", 0) + gameManager.GetMoney());
