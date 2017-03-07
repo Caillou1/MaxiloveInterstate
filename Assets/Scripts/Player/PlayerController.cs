@@ -50,7 +50,13 @@ public class PlayerController : MonoBehaviour {
 
     public static PlayerController Instance;
 
+    public AudioHighPassFilter highpass;
+    private AudioHighPassFilter highpassVan;
+
+    private EventSystem eventSystem;
+
     void Start () {
+        eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
         CanScaleUp = true;
         Instance = this;
         cam = GameObject.Find("CameraContainer").transform.GetChild(0).GetComponent<Camera>();
@@ -75,6 +81,8 @@ public class PlayerController : MonoBehaviour {
         ScreenInf = Screen.height - PauseUI.rect.height * par.scaleFactor - 50;
         BusTex = tf.FindChild("Mesh").transform.FindChild("Sk").GetComponent<SkinnedMeshRenderer>();
         FPSText = GameObject.Find("_FPSTEXT_").GetComponent<Text>();
+        highpassVan = GetComponent<AudioHighPassFilter>();
+
         StartCoroutine(WaitForLowFPS());
     }
 
@@ -104,16 +112,18 @@ public class PlayerController : MonoBehaviour {
             FPSText.text = "FPS : "+(1.0f / Time.smoothDeltaTime);
         }
 
-        if (CanMove && Input.touches.Length > 0 && Input.touches[0].position.y > ScreenSup && Input.touches[0].position.y < ScreenInf) 
+        if (CanMove && Input.touches.Length > 0 && !eventSystem.IsPointerOverGameObject()) //Input.touches[0].position.y > ScreenSup && Input.touches[0].position.y < ScreenInf) 
         {
             if (!isFiring)
             {
+                ScreenSup /= 2;
                 propM.TriggerSwell(false);
                 isFiring = true;
                 if (!IsPaused && Ralenti)
                 {
                     Time.timeScale = 1; // DOVirtual.Float(Time.timeScale, 1f, 1f, (float t) => Time.timeScale = t);
                     //SoundManager.Instance.SetPitch();
+                    DOVirtual.Float(highpass.cutoffFrequency, 10, .5f, (float x) => { highpass.cutoffFrequency = x; highpassVan.cutoffFrequency = x; });
                 }
             }
             float from = pos.x;
@@ -124,16 +134,18 @@ public class PlayerController : MonoBehaviour {
             {
                 if (tf != null) pos = new Vector3(x, tf.position.y, tf.position.z);
             });
-        } else if (CanMove && Input.GetMouseButton(0) && Input.mousePosition.y > ScreenSup && Input.mousePosition.y < ScreenInf)
+        } else if (CanMove && Input.GetMouseButton(0) && !eventSystem.IsPointerOverGameObject()) //Input.mousePosition.y > ScreenSup && Input.mousePosition.y < ScreenInf)
         {
             if(!isFiring)
             {
+                ScreenSup /= 2;
                 propM.TriggerSwell(false);
                 isFiring = true;
                 if (!IsPaused && Ralenti)
                 {
                     Time.timeScale = 1; // DOVirtual.Float(Time.timeScale, 1f, 1f, (float t) => Time.timeScale = t);
                     //SoundManager.Instance.SetPitch();
+                    DOVirtual.Float(highpass.cutoffFrequency, 10, .5f, (float x) => { highpass.cutoffFrequency = x; highpassVan.cutoffFrequency = x; });
                 }
             }
             float from = pos.x;
@@ -147,11 +159,13 @@ public class PlayerController : MonoBehaviour {
         } else {
             if (isFiring)
             {
+                ScreenSup *= 2;
                 propM.TriggerSwell(true);
                 isFiring = false;
                 if (!IsPaused && Ralenti)
                 {
                     Time.timeScale = ValeurRalenti;
+                    DOVirtual.Float(highpass.cutoffFrequency, 5000, .5f, (float x) => { highpass.cutoffFrequency = x; highpassVan.cutoffFrequency = x; });
                     //SoundManager.Instance.SetPitch();
                     StartCoroutine(TriggerScaleUp());
                 }
@@ -170,8 +184,10 @@ public class PlayerController : MonoBehaviour {
     IEnumerator TriggerScaleUp()
     {
         yield return new WaitForSecondsRealtime(2);
-        if(CanScaleUp)
-            Time.timeScale = 1;
+        if (CanScaleUp)
+        {
+            Time.timeScale = 1; DOVirtual.Float(highpass.cutoffFrequency, 10, .5f, (float x) => { highpass.cutoffFrequency = x; highpassVan.cutoffFrequency = x; });
+        }
         CanScaleUp = true;
     }
 

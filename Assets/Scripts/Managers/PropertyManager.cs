@@ -17,7 +17,7 @@ public class PropertyManager : MonoBehaviour
 
     private bool[] isUp;
 
-    private void Awake()
+    private void Start()
     {
         rectToggles = new RectTransform[toggles.Length];
         isUp = new bool[4];
@@ -110,22 +110,22 @@ public class PropertyManager : MonoBehaviour
     {
         if(AmmoProperties.SplitNb > 0 || rectToggles[0].localScale.x > .5f)
         {
-            rectToggles[0].localScale = new Vector3(scale, scale, 1);
+            DOVirtual.Float(rectToggles[0].localScale.y, scale, .25f * Time.timeScale, (float y) => rectToggles[0].localScale = new Vector3(y, y, 0));
         }
 
         if(AmmoProperties.ExplosiveNb > 0 || rectToggles[1].localScale.x > .5f)
         {
-            rectToggles[1].localScale = new Vector3(scale, scale, 1);
+            DOVirtual.Float(rectToggles[1].localScale.y, scale, .25f * Time.timeScale, (float y) => rectToggles[1].localScale = new Vector3(y, y, 0));
         }
 
         if(AmmoProperties.PiercingNb > 0 || rectToggles[2].localScale.x > .5f)
         {
-            rectToggles[2].localScale = new Vector3(scale, scale, 1);
+            DOVirtual.Float(rectToggles[2].localScale.y, scale, .25f * Time.timeScale, (float y) => rectToggles[2].localScale = new Vector3(y, y, 0));
         }
 
         if(AmmoProperties.HomingNb > 0 || rectToggles[3].localScale.x > .5f)
         {
-            rectToggles[3].localScale = new Vector3(scale, scale, 1);
+            DOVirtual.Float(rectToggles[3].localScale.y, scale, .25f * Time.timeScale, (float y) => rectToggles[3].localScale = new Vector3(y, y, 0));
         }
     }
 
@@ -133,22 +133,22 @@ public class PropertyManager : MonoBehaviour
     {
         if (AmmoProperties.SplitNb > 0 || rectToggles[0].anchoredPosition.y > -70)
         {
-            rectToggles[0].anchoredPosition = new Vector3(rectToggles[0].anchoredPosition.x, move, 0);
+            DOVirtual.Float(rectToggles[0].anchoredPosition.y, move, .25f * Time.timeScale, (float y) => rectToggles[0].anchoredPosition = new Vector3(rectToggles[0].anchoredPosition.x, y, 0));
         }
 
         if (AmmoProperties.ExplosiveNb > 0 || rectToggles[1].anchoredPosition.y > -70)
         {
-            rectToggles[1].anchoredPosition = new Vector3(rectToggles[1].anchoredPosition.x, move, 0);
+            DOVirtual.Float(rectToggles[1].anchoredPosition.y, move, .25f * Time.timeScale, (float y) => rectToggles[1].anchoredPosition = new Vector3(rectToggles[1].anchoredPosition.x, y, 0));
         }
 
         if (AmmoProperties.PiercingNb > 0 || rectToggles[2].anchoredPosition.y > -70)
         {
-            rectToggles[2].anchoredPosition = new Vector3(rectToggles[2].anchoredPosition.x, move, 0);
+            DOVirtual.Float(rectToggles[2].anchoredPosition.y, move, .25f * Time.timeScale, (float y) => rectToggles[2].anchoredPosition = new Vector3(rectToggles[2].anchoredPosition.x, y, 0));
         }
 
         if (AmmoProperties.HomingNb > 0 || rectToggles[3].anchoredPosition.y > -70)
         {
-            rectToggles[3].anchoredPosition = new Vector3(rectToggles[3].anchoredPosition.x, move, 0);
+            DOVirtual.Float(rectToggles[3].anchoredPosition.y, move, .25f * Time.timeScale, (float y) => rectToggles[3].anchoredPosition = new Vector3(rectToggles[3].anchoredPosition.x, y, 0));
         }
     }
 
@@ -156,13 +156,13 @@ public class PropertyManager : MonoBehaviour
     {
         if (trigger)
         {
-            DOVirtual.Float(.5f, 1f, .125f, (float x) => ScaleToggle(x));
-            DOVirtual.Float(-70F, 0f, .125f, (float x) => MoveToggle(x));
+            MoveToggle(0f);
+            ScaleToggle(1f);
         }
         else
         {
-            DOVirtual.Float(1f, .5f, .25f, (float x) => ScaleToggle(x));
-            DOVirtual.Float(0f, -70f, .25f, (float x) => MoveToggle(x));
+            MoveToggle(-70f);
+            ScaleToggle(.5f);
         }
     }
 
