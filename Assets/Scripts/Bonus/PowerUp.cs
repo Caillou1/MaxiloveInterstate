@@ -27,5 +27,6 @@ public enum Power
     Split,
     Explosive,
     Piercing,
-    Homing
+    Homing,
+    NONE
 }

@@ -15,6 +15,8 @@ public abstract class Enemy : MonoBehaviour {
     public float MinimumTimeBetweenShots = 1f;
     public float MaximumTimeBetweenShots = 3f;
 
+    public Power PowerDropped = Power.NONE;
+
     protected Material[] InitialsMaterial;
     protected GameManager gameManager;
     protected List<Vector3> Waypoints;
@@ -38,7 +40,8 @@ public abstract class Enemy : MonoBehaviour {
     private ParticleSystem Hit;
     private ParticleSystem Pacification;
 
-    public GameObject[] PowerUps;
+    private GameObject Life;
+    private GameObject[] PowerUps;
 
     void Start () {
         Init();
@@ -78,7 +81,8 @@ public abstract class Enemy : MonoBehaviour {
             InitialsMaterial[i] = tmp[i].material;
         }
 
-        PowerUps = Resources.LoadAll<GameObject>("Bonus");
+        Life = Resources.Load<GameObject>("Bonus/Life/Life");
+        PowerUps = Resources.LoadAll<GameObject>("Bonus/Powerups");
 
         StartCoroutine(Fire());
     }
@@ -152,6 +156,7 @@ public abstract class Enemy : MonoBehaviour {
         }
 
         DropLife();
+        DropPowerUp();
         CanMove = false;
         StartCoroutine(MoveOffScreen());
     }
@@ -160,8 +165,14 @@ public abstract class Enemy : MonoBehaviour {
     {
         if(Random.value <= DropLifeChance)
         {
-            Instantiate(PowerUps[Random.Range(0, PowerUps.Length)], tf.position - new Vector3(0, 0, 0.1f), Quaternion.identity);
+            Instantiate(Life, tf.position - new Vector3(0, 0, 0.1f), Quaternion.identity);
         }
+    }
+
+    protected void DropPowerUp()
+    {
+        if(PowerDropped != Power.NONE)
+            Instantiate(PowerUps[(int)PowerDropped], tf.position - new Vector3(0, 0, 0.1f), Quaternion.identity);
     }
 
     protected void InitWaypoints()

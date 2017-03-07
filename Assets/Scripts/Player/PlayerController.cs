@@ -106,8 +106,9 @@ public class PlayerController : MonoBehaviour {
 
         if (CanMove && Input.touches.Length > 0 && Input.touches[0].position.y > ScreenSup && Input.touches[0].position.y < ScreenInf) 
         {
-            if (!isFiring) 
+            if (!isFiring)
             {
+                propM.TriggerSwell(false);
                 isFiring = true;
                 if (!IsPaused && Ralenti)
                 {
@@ -127,6 +128,7 @@ public class PlayerController : MonoBehaviour {
         {
             if(!isFiring)
             {
+                propM.TriggerSwell(false);
                 isFiring = true;
                 if (!IsPaused && Ralenti)
                 {
@@ -145,6 +147,7 @@ public class PlayerController : MonoBehaviour {
         } else {
             if (isFiring)
             {
+                propM.TriggerSwell(true);
                 isFiring = false;
                 if (!IsPaused && Ralenti)
                 {
@@ -174,7 +177,7 @@ public class PlayerController : MonoBehaviour {
 
     void SpawnBullet()
     {
-        Instantiate(Bullet, tf.position - new Vector3(0, 0, 0.04f), Quaternion.identity);
+        Instantiate(Bullet, tf.position - new Vector3(0, 0, 0.1f), Quaternion.identity);
         SoundManager.Instance.PlayShoot();
         AmplitudeData.Instance.BulletsFired++;
     }
