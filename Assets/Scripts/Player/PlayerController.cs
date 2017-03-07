@@ -24,10 +24,10 @@ public class PlayerController : MonoBehaviour {
     private GameOverUI gameOverUI;
     private PropertyManager propM;
     private GameManager gameManager;
-    private MeshRenderer Render;
     private bool CanMove = true;
     private CameraShake camShake;
     private bool CanScaleUp;
+    private PostEffect postEffect;
 
     //Particles
     private ParticleSystem Trail;
@@ -37,7 +37,6 @@ public class PlayerController : MonoBehaviour {
     private SkinnedMeshRenderer BusTex;
 
     private float ScreenSup;
-    private float ScreenInf;
 
     public RectTransform WeaponUI;
     public RectTransform PauseUI;
@@ -69,7 +68,6 @@ public class PlayerController : MonoBehaviour {
         propM = GameObject.Find("Manager").GetComponent<PropertyManager>();
         gameManager = GameObject.Find("Manager").GetComponent<GameManager>();
         CanBeHurt = true;
-        Render = tf.FindChild("Mesh").GetComponent<MeshRenderer>();
         camShake = GameObject.Find("CameraContainer").GetComponent<CameraShake>();
 
         Trail = tf.FindChild("Trail").GetComponent<ParticleSystem>();
@@ -78,10 +76,10 @@ public class PlayerController : MonoBehaviour {
         Destruction = tf.FindChild("Destruction").GetComponent<ParticleSystem>();
         var par = WeaponUI.parent.GetComponent<Canvas>();
         ScreenSup = WeaponUI.rect.height * par.scaleFactor;
-        ScreenInf = Screen.height - PauseUI.rect.height * par.scaleFactor - 50;
         BusTex = tf.FindChild("Mesh").transform.FindChild("Sk").GetComponent<SkinnedMeshRenderer>();
         FPSText = GameObject.Find("_FPSTEXT_").GetComponent<Text>();
         highpassVan = GetComponent<AudioHighPassFilter>();
+        postEffect = cam.GetComponent<PostEffect>();
 
         StartCoroutine(WaitForLowFPS());
     }
@@ -107,6 +105,14 @@ public class PlayerController : MonoBehaviour {
 
     void Update ()
     {
+        if(Time.timeScale != 1)
+        {
+            postEffect.hue = Mathf.Cos(Time.time*2);
+        } else
+        {
+            postEffect.hue = 0;
+        }
+
         if(ShowFPS)
         {
             FPSText.text = "FPS : "+(1.0f / Time.smoothDeltaTime);
