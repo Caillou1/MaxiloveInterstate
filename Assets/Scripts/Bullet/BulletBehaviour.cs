@@ -125,53 +125,54 @@ public class BulletBehaviour : MonoBehaviour
         if (collision.CompareTag("Enemy"))
         {
             var enemy = collision.gameObject.GetComponent<Enemy>();
-            if(!enemy.IsDead())
+            if (!enemy.IsDead())
             {
                 SoundManager.Instance.PlayHit();
                 TouchedEnemies++;
                 AmplitudeData.Instance.Hits++;
-            }
 
-            float dmg = Damage;
+                float dmg = Damage;
 
-            if (Explosive)
-            {
-                enemy.LeaveBomb(BombTime, BombRadius, BombDamage);
-                SoundManager.Instance.PlayBip();
-            }
-
-            if (Split && !isSecondFragment)
-            {
-                SoundManager.Instance.PlaySplit();
-
-                for (int i = 0; i < NumberOfFragment; i++)
+                if (Explosive)
                 {
-                    var bb = Instantiate(gameObject, tf.position, Quaternion.Euler(0, 0, Random.Range(-90, 90))).GetComponent<BulletBehaviour>();
-                    bb.SetFragment(true);
-                    bb.StopHomingCoroutine();
-                    if (isFragment)
-                        bb.SetSecondFragment(true);
-                    bb.IgnoreCollision(collision);
-                    if (Piercing)
-                    {
-                        bb.SetDamage(dmg / 2);
-                    }
+                    enemy.LeaveBomb(BombTime, BombRadius, BombDamage);
+                    SoundManager.Instance.PlayBip();
                 }
-                Destroy(gameObject);
-            }
-            if(Split)
-            {
-                dmg /= 2;
-            }
 
-            collision.GetComponent<Enemy>().DoDamage(dmg, Piercing);
+                if (Split && !isSecondFragment)
+                {
+                    SoundManager.Instance.PlaySplit();
 
-            if (!Piercing || TouchedEnemies >= TouchedEnemiesBeforeDestroy || enemy.isArmored)
-            {
-                Destroy(gameObject);
-            } else
-            {
-                SoundManager.Instance.PlayPierce();
+                    for (int i = 0; i < NumberOfFragment; i++)
+                    {
+                        var bb = Instantiate(gameObject, tf.position, Quaternion.Euler(0, 0, Random.Range(-90, 90))).GetComponent<BulletBehaviour>();
+                        bb.SetFragment(true);
+                        bb.StopHomingCoroutine();
+                        if (isFragment)
+                            bb.SetSecondFragment(true);
+                        bb.IgnoreCollision(collision);
+                        if (Piercing)
+                        {
+                            bb.SetDamage(dmg / 2);
+                        }
+                    }
+                    Destroy(gameObject);
+                }
+                if (Split)
+                {
+                    dmg /= 2;
+                }
+
+                collision.GetComponent<Enemy>().DoDamage(dmg, Piercing);
+
+                if (!Piercing || TouchedEnemies >= TouchedEnemiesBeforeDestroy || enemy.isArmored)
+                {
+                    Destroy(gameObject);
+                }
+                else
+                {
+                    SoundManager.Instance.PlayPierce();
+                }
             }
         } 
     }

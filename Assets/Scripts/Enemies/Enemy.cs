@@ -10,7 +10,6 @@ public abstract class Enemy : MonoBehaviour {
     public int Money;
     public float DropLifeChance;
     public float FireRate = .001f;
-    public GameObject Life;
     public GameObject Bullet;
     public Texture PeaceTexture;
     public float MinimumTimeBetweenShots = 1f;
@@ -38,6 +37,8 @@ public abstract class Enemy : MonoBehaviour {
     private ParticleSystem TrailPeace;
     private ParticleSystem Hit;
     private ParticleSystem Pacification;
+
+    public GameObject[] PowerUps;
 
     void Start () {
         Init();
@@ -76,6 +77,8 @@ public abstract class Enemy : MonoBehaviour {
         {
             InitialsMaterial[i] = tmp[i].material;
         }
+
+        PowerUps = Resources.LoadAll<GameObject>("Bonus");
 
         StartCoroutine(Fire());
     }
@@ -129,7 +132,6 @@ public abstract class Enemy : MonoBehaviour {
         Pacification.transform.parent = null;
         Pacification.GetComponent<Rigidbody>().velocity = Vector3.up * 5;
         Pacification.transform.position = tf.position;
-        Debug.Log("Pacification : " + Pacification.transform.position + "\nEnemy : " + tf.position);
 
         gameManager.AddScore(Score);
         gameManager.AddMoney(Money);
@@ -158,7 +160,7 @@ public abstract class Enemy : MonoBehaviour {
     {
         if(Random.value <= DropLifeChance)
         {
-            Instantiate(Life, tf.position - new Vector3(0, 0, 0.1f), Quaternion.identity);
+            Instantiate(PowerUps[Random.Range(0, PowerUps.Length)], tf.position - new Vector3(0, 0, 0.1f), Quaternion.identity);
         }
     }
 

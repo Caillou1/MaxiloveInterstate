@@ -217,7 +217,7 @@ public class PlayerController : MonoBehaviour {
     {
         yield return new WaitUntil(() => isFiring);
         SpawnBullet();
-        propM.DisableToggles(AmmoProperties.Cooldown);
+        //propM.DisableToggles(AmmoProperties.Cooldown);
         yield return new WaitForSeconds(AmmoProperties.Cooldown);
         StartCoroutine(Fire());
     }
@@ -234,6 +234,14 @@ public class PlayerController : MonoBehaviour {
                 AmplitudeData.Instance.LifePicked++;
                 LifePoints = Mathf.Min(LifePoints + o.LifePoint, MaxLifePoints);
                 Lives[LifePoints-1].enabled = true;
+                Destroy(other.gameObject);
+            }
+        } else if(other.CompareTag("PowerUp"))
+        {
+            var pu = other.GetComponent<PowerUp>();
+            if(pu!=null)
+            {
+                propM.AddProperty(pu.GetPower());
                 Destroy(other.gameObject);
             }
         }
