@@ -6,59 +6,96 @@ using UnityEngine.UI;
 
 public class PropertyManager : MonoBehaviour
 {
-    public float[] SplitFragments;
-    public float[] ExplosiveRadius;
-    public float[] PiercingNumber;
-    public float[] HomingRadius;
-
-    private static int SplitLevel;
-    private static int ExplosiveLevel;
-    private static int PiercingLevel;
-    private static int HomingLevel;
-
     public float[] Cooldowns;
 
     public Toggle[] toggles;
+    private WeaponCooldown[] wcToggles;
+
+    public Text[] Numbers;
 
     private void Awake()
     {
+        wcToggles = new WeaponCooldown[toggles.Length];
+        for(int i=0; i<wcToggles.Length; i++)
+        {
+            wcToggles[i] = toggles[i].GetComponent<WeaponCooldown>();
+        }
         AmmoProperties.InitUpgrades(Cooldowns[0]);
+        UpdateToggles();
     }
 
-    public void UpgradeSplit()
+    public void AddProperty(Power power)
     {
-        Debug.Log("Not implemented");
-    }
-
-    public void UpgradeExplosive()
-    {
-        Debug.Log("Not implemented");
-    }
-
-    public void UpgradePiercing()
-    {
-        Debug.Log("Not implemented");
-    }
-
-    public void UpgradeHoming()
-    {
-        Debug.Log("Not implemented");
+        AmmoProperties.AddProperty(power);
+        UpdateToggles();
     }
 
     public void EnableSplit(bool b) {
         AmmoProperties.Split = b;
+        AmmoProperties.UseProperty(Power.Split);
+        UpdateToggles();
     }
 
     public void EnableExplosive(bool b) {
         AmmoProperties.Explosive = b;
+        AmmoProperties.UseProperty(Power.Explosive);
+        UpdateToggles();
     }
 
     public void EnableHoming(bool b) {
         AmmoProperties.Homing = b;
+        AmmoProperties.UseProperty(Power.Homing);
+        UpdateToggles();
     }
 
     public void EnablePiercing(bool b) {
         AmmoProperties.Piercing = b;
+        AmmoProperties.UseProperty(Power.Piercing);
+        UpdateToggles();
+    }
+
+    private void UpdateToggles()
+    {
+        Numbers[0].text = ""+AmmoProperties.SplitNb;
+        Numbers[1].text = ""+AmmoProperties.ExplosiveNb;
+        Numbers[2].text = ""+AmmoProperties.PiercingNb;
+        Numbers[3].text = ""+AmmoProperties.HomingNb;
+
+        if (AmmoProperties.SplitNb > 0)
+        {
+            wcToggles[0].Enable();
+        }
+        else
+        {
+            wcToggles[0].Disable();
+        }
+
+        if (AmmoProperties.ExplosiveNb > 0)
+        {
+            wcToggles[1].Enable();
+        }
+        else
+        {
+            wcToggles[1].Disable();
+        }
+
+        if (AmmoProperties.PiercingNb > 0)
+        {
+            wcToggles[2].Enable();
+        }
+        else
+        {
+            wcToggles[2].Disable();
+        }
+
+        if (AmmoProperties.HomingNb > 0)
+        {
+            wcToggles[3].Enable();
+        }
+        else
+        {
+            wcToggles[3].Disable();
+        }
     }
 
     public void ChangeActiveProperty(bool b)
@@ -74,7 +111,7 @@ public class PropertyManager : MonoBehaviour
             AmmoProperties.ActiveProperties--;
             SoundManager.Instance.PlayCancel();
         }
-        AmmoProperties.Cooldown = Cooldowns[AmmoProperties.ActiveProperties];
+        //AmmoProperties.Cooldown = Cooldowns[AmmoProperties.ActiveProperties];
     }
 
     public void DisableToggles(float time)
@@ -84,22 +121,18 @@ public class PropertyManager : MonoBehaviour
         if (AmmoProperties.Split)
         {
             toggles[0].interactable = false;
-            toggles[0].transform.GetChild(0).GetComponent<ScaleModulator>().TriggerSwell(AmmoProperties.Cooldown);
         }
         if (AmmoProperties.Explosive)
         {
             toggles[1].interactable = false;
-            toggles[1].transform.GetChild(0).GetComponent<ScaleModulator>().TriggerSwell(AmmoProperties.Cooldown);
         }
         if (AmmoProperties.Piercing)
         {
             toggles[2].interactable = false;
-            toggles[2].transform.GetChild(0).GetComponent<ScaleModulator>().TriggerSwell(AmmoProperties.Cooldown);
         }
         if (AmmoProperties.Homing)
         {
             toggles[3].interactable = false;
-            toggles[3].transform.GetChild(0).GetComponent<ScaleModulator>().TriggerSwell(AmmoProperties.Cooldown);
         }
 
         StartCoroutine(Cooldown(time));

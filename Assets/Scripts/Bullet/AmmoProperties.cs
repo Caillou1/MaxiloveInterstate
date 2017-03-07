@@ -22,6 +22,44 @@ public static class AmmoProperties {
 
     public static int ActiveProperties;
 
+    public static void AddProperty(Power power)
+    {
+        switch (power)
+        {
+            case Power.Explosive:
+                AmmoProperties.ExplosiveNb++;
+                break;
+            case Power.Homing:
+                AmmoProperties.HomingNb++;
+                break;
+            case Power.Piercing:
+                AmmoProperties.PiercingNb++;
+                break;
+            case Power.Split:
+                AmmoProperties.SplitNb++;
+                break;
+        }
+    }
+
+    public static void UseProperty(Power power)
+    {
+        switch (power)
+        {
+            case Power.Explosive:
+                AmmoProperties.ExplosiveNb--;
+                break;
+            case Power.Homing:
+                AmmoProperties.HomingNb--;
+                break;
+            case Power.Piercing:
+                AmmoProperties.PiercingNb--;
+                break;
+            case Power.Split:
+                AmmoProperties.SplitNb--;
+                break;
+        }
+    }
+
     public static bool CanShot
     {
         get

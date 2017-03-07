@@ -7,33 +7,87 @@ public class WeaponCooldown : MonoBehaviour {
 	Toggle toggle;
 
 	Image img;
+
+    public Sprite Available;
+    public Sprite AvailablePressed;
+
     public Sprite Toggled;
     public Sprite ToggledPressed;
 
-    Sprite Initial;
-    Sprite InitialPressed;
+    private Sprite Disabled;
+    private Sprite DisabledPressed;
 
-    void Start(){
-		toggle = GetComponent<Toggle> ();
-		img = GetComponent<Image> ();
+    private bool isDisabled = true;
+    private bool isAvailable = false;
+    private bool isToggled = false;
 
-        Initial = img.sprite;
-        InitialPressed = toggle.spriteState.pressedSprite;
+    private ScaleModulator scaleMod;
+
+    public Power power;
+
+    void Awake(){
+        scaleMod = GetComponentInChildren<ScaleModulator>();
+		toggle = GetComponent<Toggle>();
+		img = GetComponent<Image>();
+
+        Disabled = img.sprite;
+        DisabledPressed = toggle.spriteState.pressedSprite;
 	}
 
-	void Update(){
-		if (toggle.isOn) {
+    public void Disable()
+    {
+        toggle.interactable = false;
+        isDisabled = true;
+        isAvailable = false;
+        isToggled = false;
+        UpdateSprite();
+        Debug.Log("disabled");
+    }
+
+    public void Enable()
+    {
+        toggle.interactable = true;
+        isDisabled = false;
+        isAvailable = true;
+        isToggled = false;
+        UpdateSprite();
+    }
+
+    public void Toggle()
+    {
+        toggle.interactable = true;
+        isDisabled = false;
+        isAvailable = false;
+        isToggled = true;
+        UpdateSprite();
+        ActivateCooldown(10);
+    }
+
+    public void UpdateSprite()
+    {
+        if(isDisabled)
+        {
+            var state = toggle.spriteState;
+            state.pressedSprite = DisabledPressed;
+            state.disabledSprite = Disabled;
+            img.sprite = Disabled;
+            toggle.spriteState = state;
+        } else if(isAvailable)
+        {
+            var state = toggle.spriteState;
+            state.pressedSprite = AvailablePressed;
+            state.disabledSprite = Available;
+            img.sprite = Available;
+            toggle.spriteState = state;
+        } else if(isToggled)
+        {
+            var state = toggle.spriteState;
+            state.pressedSprite = ToggledPressed;
+            state.disabledSprite = Toggled;
             img.sprite = Toggled;
-            var t = toggle.spriteState;
-            t.pressedSprite = ToggledPressed;
-            toggle.spriteState = t;
-        } else {
-			img.sprite = Initial;
-            var t = toggle.spriteState;
-            t.pressedSprite = InitialPressed;
-            toggle.spriteState = t;
+            toggle.spriteState = state;
         }
-	}
+    }
 
 	public void ActivateCooldown(float time){
 		
@@ -41,8 +95,37 @@ public class WeaponCooldown : MonoBehaviour {
 	}
 
 	IEnumerator StartCooldown(float time){
+        toggle.interactable = false;
+        scaleMod.TriggerSwell(time);
 		yield return new WaitForSeconds (time);
-		toggle.interactable = true;
-		toggle.isOn = true;
-	}
+        int x = 0;
+        switch (power)
+        {
+            case Power.Explosive:
+                x = AmmoProperties.ExplosiveNb;
+                AmmoProperties.Explosive = false;
+                break;
+            case Power.Homing:
+                x = AmmoProperties.HomingNb;
+                AmmoProperties.Homing = false;
+                break;
+            case Power.Piercing:
+                x = AmmoProperties.PiercingNb;
+                AmmoProperties.Piercing = false;
+                break;
+            case Power.Split:
+                x = AmmoProperties.SplitNb;
+                AmmoProperties.Split = false;
+                break;
+        }
+
+        if (x == 0)
+        {
+            Disable();
+        }
+        else
+        {
+            Enable();
+        }
+    }
 }

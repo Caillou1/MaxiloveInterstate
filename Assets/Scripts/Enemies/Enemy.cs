@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
 public abstract class Enemy : MonoBehaviour {
     public float LifePoints;
@@ -39,7 +38,7 @@ public abstract class Enemy : MonoBehaviour {
     private ParticleSystem Hit;
     private ParticleSystem Pacification;
 
-    private GameObject[] PowerUps;
+    public GameObject[] PowerUps;
 
     void Start () {
         Init();
@@ -79,11 +78,7 @@ public abstract class Enemy : MonoBehaviour {
             InitialsMaterial[i] = tmp[i].material;
         }
 
-        var tt = AssetDatabase.LoadAllAssetsAtPath("Assets/Prefabs/Bonus");
-        for(int i = 0; i<tt.Length; i++)
-        {
-            PowerUps[i] = (GameObject)tt[i];
-        }
+        PowerUps = Resources.LoadAll<GameObject>("Bonus");
 
         StartCoroutine(Fire());
     }
