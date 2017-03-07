@@ -41,7 +41,6 @@ public class WeaponCooldown : MonoBehaviour {
         isAvailable = false;
         isToggled = false;
         UpdateSprite();
-        Debug.Log("disabled");
     }
 
     public void Enable()
