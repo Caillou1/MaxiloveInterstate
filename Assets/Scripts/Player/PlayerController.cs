@@ -163,8 +163,11 @@ public class PlayerController : MonoBehaviour {
         } else {
             if (isFiring)
             {
-                CheckRect.localScale = new Vector3(1f, 1f, 1);
-                CheckRect.anchoredPosition = new Vector3(0, 0, 0);
+                if (AmmoProperties.ExplosiveNb > 0 || AmmoProperties.SplitNb > 0 || AmmoProperties.PiercingNb > 0 || AmmoProperties.HomingNb > 0)
+                {
+                    CheckRect.localScale = new Vector3(1f, 1f, 1);
+                    CheckRect.anchoredPosition = new Vector3(0, 0, 0);
+                }
                 ScreenSup *= 2;
                 propM.TriggerSwell(true);
                 isFiring = false;

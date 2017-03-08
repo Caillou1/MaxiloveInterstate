@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyBullet : MonoBehaviour {
-    public float Speed = 10;
+    public float Speed;
     public float LifeTime;
 
     private Transform tf;
@@ -11,6 +11,9 @@ public class EnemyBullet : MonoBehaviour {
 	void Start () {
         tf = transform;
         Destroy(gameObject, LifeTime);
+        var wave = SpawnManager.Instance.GetWave();
+        if (wave > 45)
+            Speed += (0.05f * ((float)wave - 45)); 
 	}
 	
 	void Update () {

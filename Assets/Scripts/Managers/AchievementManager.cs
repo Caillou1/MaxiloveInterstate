@@ -20,6 +20,6 @@ public class AchievementManager : MonoBehaviour {
 
     public void UnlockAchievement(int i)
     {
-        PlayerPrefs.SetInt("Ach" + i, 1);
+        //PlayerPrefs.SetInt("Ach" + i, 1);
     }
 }
