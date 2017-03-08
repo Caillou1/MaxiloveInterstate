@@ -53,6 +53,7 @@ public class PlayerController : MonoBehaviour {
     private AudioHighPassFilter highpassVan;
 
     private EventSystem eventSystem;
+    private bool HasLostLife;
 
     void Start () {
         eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
@@ -78,6 +79,7 @@ public class PlayerController : MonoBehaviour {
         FPSText = GameObject.Find("_FPSTEXT_").GetComponent<Text>();
         highpassVan = GetComponent<AudioHighPassFilter>();
         postEffect = cam.GetComponent<PostEffect>();
+        HasLostLife = false;
 
         StartCoroutine(WaitForAchievement());
         StartCoroutine(WaitForLowFPS());
@@ -85,8 +87,12 @@ public class PlayerController : MonoBehaviour {
 
     IEnumerator WaitForAchievement()
     {
+        yield return new WaitForSeconds(1);
         yield return new WaitUntil(() => GameManager.Instance.GetScore()>= 5000);
-        AchievementManager.Instance.UnlockAchievement(3);
+        if (!HasLostLife)
+        {
+            AchievementManager.Instance.UnlockAchievement(3);
+        }
     }
 
     IEnumerator WaitForLowFPS()
@@ -215,7 +221,7 @@ public class PlayerController : MonoBehaviour {
         {
             Hit.Play(true);
             LifePoints -= damage;
-            StopCoroutine(WaitForAchievement());
+            HasLostLife = true;
 
             Lives[LifePoints].enabled = false;
 

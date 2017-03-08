@@ -17,6 +17,7 @@ public class PropertyManager : MonoBehaviour
 
     private bool[] isUp;
     private bool IsCountdownStarted = false;
+    private bool CanAchieve = true;
 
     public static PropertyManager Instance = null;
 
@@ -192,16 +193,19 @@ public class PropertyManager : MonoBehaviour
 
     private IEnumerator StartAchievementCountdown()
     {
+        StartCoroutine(WaitForCancel());
         IsCountdownStarted = true;
         yield return new WaitForSeconds(40);
-        AchievementManager.Instance.UnlockAchievement(1);
-        IsCountdownStarted = false;
+        if(CanAchieve)
+            AchievementManager.Instance.UnlockAchievement(1);
+        CanAchieve = true;
     }
 
-    public void StopAchievementCountdown()
+    IEnumerator WaitForCancel()
     {
+        yield return new WaitUntil(() => !AmmoProperties.Split && !AmmoProperties.Explosive && !AmmoProperties.Piercing && !AmmoProperties.Homing);
+        CanAchieve = false;
         IsCountdownStarted = false;
-        StopCoroutine(StartAchievementCountdown());
     }
 
     public void DisableToggles(float time)

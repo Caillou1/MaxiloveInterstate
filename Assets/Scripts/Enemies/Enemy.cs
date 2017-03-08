@@ -122,6 +122,15 @@ public abstract class Enemy : MonoBehaviour {
     protected void Peace()
     {
         StopAllCoroutines();
+
+        if((this as BigEnemy)!=null)
+        {
+            if (AmmoProperties.Piercing && AmmoProperties.Split && AmmoProperties.Homing && AmmoProperties.Explosive)
+            {
+                AchievementManager.Instance.UnlockAchievement(0);
+            }
+        }
+
         foreach (var im in InitialsMaterial)
         {
             im.mainTexture = PeaceTexture;
