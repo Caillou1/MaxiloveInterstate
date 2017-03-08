@@ -121,6 +121,8 @@ public class WeaponCooldown : MonoBehaviour {
                 break;
         }
 
+        PropertyManager.Instance.StopAchievementCountdown();
+
         if (x == 0)
         {
             Disable();

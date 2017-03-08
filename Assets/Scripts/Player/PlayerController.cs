@@ -79,7 +79,14 @@ public class PlayerController : MonoBehaviour {
         highpassVan = GetComponent<AudioHighPassFilter>();
         postEffect = cam.GetComponent<PostEffect>();
 
+        StartCoroutine(WaitForAchievement());
         StartCoroutine(WaitForLowFPS());
+    }
+
+    IEnumerator WaitForAchievement()
+    {
+        yield return new WaitUntil(() => GameManager.Instance.GetScore()>= 5000);
+        AchievementManager.Instance.UnlockAchievement(3);
     }
 
     IEnumerator WaitForLowFPS()
@@ -208,6 +215,7 @@ public class PlayerController : MonoBehaviour {
         {
             Hit.Play(true);
             LifePoints -= damage;
+            StopCoroutine(WaitForAchievement());
 
             Lives[LifePoints].enabled = false;
 
@@ -225,6 +233,11 @@ public class PlayerController : MonoBehaviour {
 
     IEnumerator GameOver()
     {
+        if(GameManager.Instance.GetScore() >= 7000)
+        {
+            AchievementManager.Instance.UnlockAchievement(2);
+        }
+
         BusTex.material.mainTexture = PoliceTex;
         Ralenti = false;
         Destruction.Play(true);

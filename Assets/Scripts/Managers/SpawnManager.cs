@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
+    public GameObject[] TutorialWaves;
+    private int TutoWave;
+
     public GameObject[] EasyWaves;
     public GameObject[] MediumWaves;
     public float MediumSpawnChance;
@@ -33,6 +36,7 @@ public class SpawnManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        TutoWave = 0;
 
         NotSeenEasyWaves = new List<int>();
         NotSeenMediumWaves = new List<int>();
@@ -100,38 +104,45 @@ public class SpawnManager : MonoBehaviour
 
     void Spawn()
     {
-        wave++;
+        if (TutoWave == TutorialWaves.Length)
+        {
+            wave++;
 
-        var x = Random.value;
+            var x = Random.value;
 
-        if (CanSpawnHard && x <= HardSpawnChance)
+            if (CanSpawnHard && x <= HardSpawnChance)
+            {
+                SoundManager.Instance.PlaySpawnTank();
+                if (NotSeenHardWaves.Count == 0)
+                    ResetNotSeenHardWaves();
+                int y = NotSeenHardWaves[Random.Range(0, NotSeenHardWaves.Count)];
+                NotSeenHardWaves.Remove(y);
+                Instantiate(HardWaves[y], Vector3.zero, Quaternion.identity, tf);
+                HardSpawnChance += SpawnChanceAugmentation;
+            }
+            else if (CanSpawnMedium && (1 - x) <= MediumSpawnChance)
+            {
+                SoundManager.Instance.PlaySpawnVoiture();
+                if (NotSeenMediumWaves.Count == 0)
+                    ResetNotSeenMediumWaves();
+                int y = NotSeenMediumWaves[Random.Range(0, NotSeenMediumWaves.Count)];
+                NotSeenMediumWaves.Remove(y);
+                Instantiate(MediumWaves[y], Vector3.zero, Quaternion.identity, tf);
+                MediumSpawnChance += SpawnChanceAugmentation;
+            }
+            else
+            {
+                SoundManager.Instance.PlaySpawnMoto();
+                if (NotSeenEasyWaves.Count == 0)
+                    ResetNotSeenEasyWaves();
+                int y = NotSeenEasyWaves[Random.Range(0, NotSeenEasyWaves.Count)];
+                NotSeenEasyWaves.Remove(y);
+                Instantiate(EasyWaves[y], Vector3.zero, Quaternion.identity, tf);
+            }
+        } else
         {
-            SoundManager.Instance.PlaySpawnTank();
-            if (NotSeenHardWaves.Count == 0)
-                ResetNotSeenHardWaves();
-            int y = NotSeenHardWaves[Random.Range(0, NotSeenHardWaves.Count)];
-            NotSeenHardWaves.Remove(y);
-            Instantiate(HardWaves[y], Vector3.zero, Quaternion.identity, tf);
-            HardSpawnChance += SpawnChanceAugmentation;
-        }
-        else if (CanSpawnMedium && (1 - x) <= MediumSpawnChance)
-        {
-            SoundManager.Instance.PlaySpawnVoiture();
-            if (NotSeenMediumWaves.Count == 0)
-                ResetNotSeenMediumWaves();
-            int y = NotSeenMediumWaves[Random.Range(0, NotSeenMediumWaves.Count)];
-            NotSeenMediumWaves.Remove(y);
-            Instantiate(MediumWaves[y], Vector3.zero, Quaternion.identity, tf);
-            MediumSpawnChance += SpawnChanceAugmentation;
-        }
-        else
-        {
-            SoundManager.Instance.PlaySpawnMoto();
-            if (NotSeenEasyWaves.Count == 0)
-                ResetNotSeenEasyWaves();
-            int y = NotSeenEasyWaves[Random.Range(0, NotSeenEasyWaves.Count)];
-            NotSeenEasyWaves.Remove(y);
-            Instantiate(EasyWaves[y], Vector3.zero, Quaternion.identity, tf);
+            Instantiate(TutorialWaves[TutoWave], Vector3.zero, Quaternion.identity, tf);
+            TutoWave++;
         }
 
         StartCoroutine(WaitForEmptyScreen());

@@ -173,6 +173,11 @@ public class BulletBehaviour : MonoBehaviour
                 {
                     SoundManager.Instance.PlayPierce();
                 }
+
+                if(Piercing && Split && Homing && Explosive && enemy.IsDead())
+                {
+                    AchievementManager.Instance.UnlockAchievement(0);
+                }
             }
         } 
     }
