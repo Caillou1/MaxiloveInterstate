@@ -16,9 +16,14 @@ public class PropertyManager : MonoBehaviour
     public Text[] Numbers;
 
     private bool[] isUp;
+    private bool IsCountdownStarted = false;
+    private bool CanAchieve = true;
+
+    public static PropertyManager Instance = null;
 
     private void Start()
     {
+        Instance = this;
         rectToggles = new RectTransform[toggles.Length];
         isUp = new bool[4];
         wcToggles = new WeaponCooldown[toggles.Length];
@@ -173,6 +178,10 @@ public class PropertyManager : MonoBehaviour
         {
             AmmoProperties.ActiveProperties++;
             SoundManager.Instance.PlayAccept();
+            if(!IsCountdownStarted)
+            {
+                StartCoroutine(StartAchievementCountdown());
+            }
         }
         else
         {
@@ -180,6 +189,23 @@ public class PropertyManager : MonoBehaviour
             SoundManager.Instance.PlayCancel();
         }
         //AmmoProperties.Cooldown = Cooldowns[AmmoProperties.ActiveProperties];
+    }
+
+    private IEnumerator StartAchievementCountdown()
+    {
+        StartCoroutine(WaitForCancel());
+        IsCountdownStarted = true;
+        yield return new WaitForSeconds(40);
+        if(CanAchieve)
+            AchievementManager.Instance.UnlockAchievement(1);
+        CanAchieve = true;
+    }
+
+    IEnumerator WaitForCancel()
+    {
+        yield return new WaitUntil(() => !AmmoProperties.Split && !AmmoProperties.Explosive && !AmmoProperties.Piercing && !AmmoProperties.Homing);
+        CanAchieve = false;
+        IsCountdownStarted = false;
     }
 
     public void DisableToggles(float time)
