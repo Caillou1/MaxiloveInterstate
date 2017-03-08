@@ -12,8 +12,8 @@ public class EnemyBullet : MonoBehaviour {
         tf = transform;
         Destroy(gameObject, LifeTime);
         var wave = SpawnManager.Instance.GetWave();
-        if (wave > 5)
-            Speed += (0.05f * ((float)wave - 5)); 
+        if (wave > 45)
+            Speed += (0.05f * ((float)wave - 45)); 
 	}
 	
 	void Update () {
