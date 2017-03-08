@@ -145,7 +145,7 @@ public abstract class Enemy : MonoBehaviour {
         Destroy(Pacification.gameObject, 5);
         Pacification.transform.localPosition = Vector3.zero;
         Pacification.transform.parent = null;
-        Pacification.GetComponent<Rigidbody>().velocity = Vector3.up * 5;
+        Pacification.GetComponent<Rigidbody>().velocity = Vector3.up * 1.5f;
         Pacification.transform.position = tf.position;
 
         gameManager.AddScore(Score);

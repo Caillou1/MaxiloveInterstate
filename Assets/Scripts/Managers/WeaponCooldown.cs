@@ -40,6 +40,7 @@ public class WeaponCooldown : MonoBehaviour {
         isDisabled = true;
         isAvailable = false;
         isToggled = false;
+        img.color = new Color(1, 1, 1, 0.5f);
         UpdateSprite();
     }
 
@@ -51,6 +52,7 @@ public class WeaponCooldown : MonoBehaviour {
             isDisabled = false;
             isAvailable = true;
             isToggled = false;
+            img.color = new Color(1, 1, 1, 1f);
             UpdateSprite();
         }
     }
