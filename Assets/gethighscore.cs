@@ -5,6 +5,6 @@ using UnityEngine.UI;
 
 public class gethighscore : MonoBehaviour {
 	void Start () {
-        GetComponent<Text>().text += PlayerPrefs.GetInt("BestScore", 0);
+        GetComponent<Text>().text = ""+PlayerPrefs.GetInt("BestScore", 0);
 	}
 }

@@ -55,6 +55,10 @@ public class PlayerController : MonoBehaviour {
     private EventSystem eventSystem;
     private bool HasLostLife;
 
+    public RectTransform CheckRect;
+
+    private Canvas canvas;
+
     void Start () {
         eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
         CanScaleUp = true;
@@ -80,7 +84,7 @@ public class PlayerController : MonoBehaviour {
         highpassVan = GetComponent<AudioHighPassFilter>();
         postEffect = cam.GetComponent<PostEffect>();
         HasLostLife = false;
-
+        canvas = GameObject.Find("CanvasUI").GetComponent<Canvas>();
         StartCoroutine(WaitForAchievement());
         StartCoroutine(WaitForLowFPS());
     }
@@ -113,48 +117,30 @@ public class PlayerController : MonoBehaviour {
 
         StartCoroutine(WaitForLowFPS());
     }
+    private bool IsPointerOverUIObject()
+    {
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        eventDataCurrentPosition.position = new Vector2(Input.touches[0].position.x, Input.touches[0].position.y);
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        return results.Count > 0;
+    }
 
     void Update ()
     {
-        if(Time.timeScale != 1)
-        {
-            postEffect.hue = Mathf.Cos(Time.time*2);
-        } else
-        {
-            postEffect.hue = 0;
-        }
+        float Sup = (CheckRect.rect.height * canvas.scaleFactor * CheckRect.localScale.x);
 
-        if(ShowFPS)
+        if (ShowFPS)
         {
             FPSText.text = "FPS : "+(1.0f / Time.smoothDeltaTime);
         }
 
-        if (CanMove && Input.touches.Length > 0 && !eventSystem.IsPointerOverGameObject()) //Input.touches[0].position.y > ScreenSup && Input.touches[0].position.y < ScreenInf) 
-        {
-            if (!isFiring)
-            {
-                ScreenSup /= 2;
-                propM.TriggerSwell(false);
-                isFiring = true;
-                if (!IsPaused && Ralenti)
-                {
-                    Time.timeScale = 1; // DOVirtual.Float(Time.timeScale, 1f, 1f, (float t) => Time.timeScale = t);
-                    //SoundManager.Instance.SetPitch();
-                    DOVirtual.Float(highpass.cutoffFrequency, 10, .5f, (float x) => { highpass.cutoffFrequency = x; highpassVan.cutoffFrequency = x; });
-                }
-            }
-            float from = pos.x;
-            float to = cam.ScreenToWorldPoint(new Vector3(Input.touches[0].position.x, tf.position.y, 10)).x;
-            if (to > 2.5f) to = 2.5f;
-            else if (to < -2.5f) to = -2.5f;
-            DOVirtual.Float(from, to, SlideSpeed, (float x) =>
-            {
-                if (tf != null) pos = new Vector3(x, tf.position.y, tf.position.z);
-            });
-        } else if (CanMove && Input.GetMouseButton(0) && !eventSystem.IsPointerOverGameObject()) //Input.mousePosition.y > ScreenSup && Input.mousePosition.y < ScreenInf)
+        if (CanMove && Input.GetMouseButton(0) && !eventSystem.IsPointerOverGameObject() && Input.mousePosition.y > Sup)
         {
             if(!isFiring)
             {
+                CheckRect.localScale = new Vector3(.5f, .5f, 1);
+                CheckRect.anchoredPosition = new Vector3(0, -70, 0);
                 ScreenSup /= 2;
                 propM.TriggerSwell(false);
                 isFiring = true;
@@ -163,6 +149,7 @@ public class PlayerController : MonoBehaviour {
                     Time.timeScale = 1; // DOVirtual.Float(Time.timeScale, 1f, 1f, (float t) => Time.timeScale = t);
                     //SoundManager.Instance.SetPitch();
                     DOVirtual.Float(highpass.cutoffFrequency, 10, .5f, (float x) => { highpass.cutoffFrequency = x; highpassVan.cutoffFrequency = x; });
+                    DOVirtual.Float(postEffect.vigneting, 0, .5f, (float x) => postEffect.vigneting = x);
                 }
             }
             float from = pos.x;
@@ -176,6 +163,8 @@ public class PlayerController : MonoBehaviour {
         } else {
             if (isFiring)
             {
+                CheckRect.localScale = new Vector3(1f, 1f, 1);
+                CheckRect.anchoredPosition = new Vector3(0, 0, 0);
                 ScreenSup *= 2;
                 propM.TriggerSwell(true);
                 isFiring = false;
@@ -183,6 +172,7 @@ public class PlayerController : MonoBehaviour {
                 {
                     Time.timeScale = ValeurRalenti;
                     DOVirtual.Float(highpass.cutoffFrequency, 5000, .5f, (float x) => { highpass.cutoffFrequency = x; highpassVan.cutoffFrequency = x; });
+                    DOVirtual.Float(postEffect.vigneting, .5f, .5f, (float x) => postEffect.vigneting = x);
                     //SoundManager.Instance.SetPitch();
                     StartCoroutine(TriggerScaleUp());
                 }
@@ -200,10 +190,12 @@ public class PlayerController : MonoBehaviour {
 
     IEnumerator TriggerScaleUp()
     {
-        yield return new WaitForSecondsRealtime(2);
+        yield return new WaitForSecondsRealtime(5);
         if (CanScaleUp)
         {
-            Time.timeScale = 1; DOVirtual.Float(highpass.cutoffFrequency, 10, .5f, (float x) => { highpass.cutoffFrequency = x; highpassVan.cutoffFrequency = x; });
+            Time.timeScale = 1;
+            DOVirtual.Float(highpass.cutoffFrequency, 10, .25f, (float x) => { highpass.cutoffFrequency = x; highpassVan.cutoffFrequency = x; });
+            DOVirtual.Float(postEffect.vigneting, 0, .25f, (float x) => postEffect.vigneting = x);
         }
         CanScaleUp = true;
     }

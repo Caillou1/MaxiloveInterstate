@@ -19,7 +19,12 @@ public class PropertyManager : MonoBehaviour
     private bool IsCountdownStarted = false;
     private bool CanAchieve = true;
 
+    private PostEffect LSD;
+
     public static PropertyManager Instance = null;
+
+
+    private int AddLSD;
 
     private void Start()
     {
@@ -35,6 +40,9 @@ public class PropertyManager : MonoBehaviour
         }
         AmmoProperties.InitUpgrades(Cooldowns[0]);
         UpdateToggles();
+
+        AddLSD = 0;
+        LSD = GameObject.Find("Camera").GetComponent<PostEffect>();
     }
 
     public void AddProperty(Power power)
@@ -182,6 +190,9 @@ public class PropertyManager : MonoBehaviour
             {
                 StartCoroutine(StartAchievementCountdown());
             }
+
+            AddLSD++;
+            StartCoroutine(LSDCountdown());
         }
         else
         {
@@ -189,6 +200,18 @@ public class PropertyManager : MonoBehaviour
             SoundManager.Instance.PlayCancel();
         }
         //AmmoProperties.Cooldown = Cooldowns[AmmoProperties.ActiveProperties];
+    }
+
+    IEnumerator LSDCountdown()
+    {
+        LSD.Trigger(true);
+        yield return new WaitForSeconds(10f);
+        AddLSD--;
+        if (AddLSD <= 1)
+        {
+            LSD.Trigger(false);
+            AddLSD = 0;
+        }
     }
 
     private IEnumerator StartAchievementCountdown()

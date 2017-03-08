@@ -12,14 +12,18 @@ public class SpawnManager : MonoBehaviour
     public float MediumSpawnChance;
     public GameObject[] HardWaves;
     public float HardSpawnChance;
+    public GameObject[] VeryHardWaves;
+    public float VeryHardSpawnChance;
 
     public float SpawnChanceAugmentation;
 
+    private bool CanSpawnVeryHard;
     private bool CanSpawnHard;
     private bool CanSpawnMedium;
 
     public int MinimumScoreBeforeMedium;
     public int MinimumScoreBeforeHard;
+    public int MinimumScoreBeforeVeryHard;
     
     private bool EnemiesJustSpawned;
     private Transform tf;
@@ -30,6 +34,7 @@ public class SpawnManager : MonoBehaviour
     private List<int> NotSeenEasyWaves;
     private List<int> NotSeenMediumWaves;
     private List<int> NotSeenHardWaves;
+    private List<int> NotSeenVeryHardWaves;
 
     public static SpawnManager Instance = null;
 
@@ -41,6 +46,11 @@ public class SpawnManager : MonoBehaviour
         NotSeenEasyWaves = new List<int>();
         NotSeenMediumWaves = new List<int>();
         NotSeenHardWaves = new List<int>();
+        NotSeenVeryHardWaves = new List<int>();
+
+        CanSpawnHard = false;
+        CanSpawnMedium = false;
+        CanSpawnVeryHard = false;
 
         ResetAllNotSeenWaves();
 
@@ -56,6 +66,7 @@ public class SpawnManager : MonoBehaviour
         ResetNotSeenEasyWaves();
         ResetNotSeenMediumWaves();
         ResetNotSeenHardWaves();
+        ResetNotSeenVeryHardWaves();
     }
 
     public void ResetNotSeenEasyWaves()
@@ -82,6 +93,14 @@ public class SpawnManager : MonoBehaviour
             NotSeenHardWaves.Add(i);
     }
 
+    public void ResetNotSeenVeryHardWaves()
+    {
+        NotSeenVeryHardWaves.Clear();
+
+        for (int i = 0; i < VeryHardWaves.Length; i++)
+            NotSeenVeryHardWaves.Add(i);
+    }
+
     public void Register(GameObject obj)
     {
         EnemiesOnScreen.Add(obj);
@@ -102,6 +121,11 @@ public class SpawnManager : MonoBehaviour
         CanSpawnHard = true;
     }
 
+    public void SetSpawnVeryHard()
+    {
+        CanSpawnVeryHard = true;
+    }
+
     void Spawn()
     {
         if (TutoWave == TutorialWaves.Length)
@@ -110,7 +134,17 @@ public class SpawnManager : MonoBehaviour
 
             var x = Random.value;
 
-            if (CanSpawnHard && x <= HardSpawnChance)
+            if(CanSpawnVeryHard && (1-x) <= VeryHardSpawnChance)
+            {
+                SoundManager.Instance.PlaySpawnTank();
+                if (NotSeenVeryHardWaves.Count == 0)
+                    ResetNotSeenHardWaves();
+                int y = NotSeenVeryHardWaves[Random.Range(0, NotSeenVeryHardWaves.Count)];
+                NotSeenVeryHardWaves.Remove(y);
+                Instantiate(VeryHardWaves[y], Vector3.zero, Quaternion.identity, tf);
+                VeryHardSpawnChance += SpawnChanceAugmentation;
+            }
+            else if (CanSpawnHard && x <= HardSpawnChance)
             {
                 SoundManager.Instance.PlaySpawnTank();
                 if (NotSeenHardWaves.Count == 0)

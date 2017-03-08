@@ -122,8 +122,10 @@ public abstract class Enemy : MonoBehaviour {
     protected void Peace()
     {
         StopAllCoroutines();
+        AmplitudeData.Instance.EnemiesKilled++;
+        SpawnManager.Instance.Unregister(gameObject);
 
-        if((this as BigEnemy)!=null)
+        if ((this as BigEnemy)!=null)
         {
             if (AmmoProperties.Piercing && AmmoProperties.Split && AmmoProperties.Homing && AmmoProperties.Explosive)
             {
@@ -346,7 +348,5 @@ public abstract class Enemy : MonoBehaviour {
     private void OnDestroy()
     {
         StopAllCoroutines();
-        AmplitudeData.Instance.EnemiesKilled++;
-        SpawnManager.Instance.Unregister(gameObject);
     }
 }
