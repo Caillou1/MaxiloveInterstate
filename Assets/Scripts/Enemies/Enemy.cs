@@ -174,7 +174,7 @@ public abstract class Enemy : MonoBehaviour {
 
     protected void DropLife()
     {
-        if(Random.value <= DropLifeChance)
+        if(SpawnManager.Instance.GetWave() <= 35 && Random.value <= DropLifeChance)
         {
             Instantiate(Life, tf.position - new Vector3(0, 0, 0.1f), Quaternion.identity);
         }

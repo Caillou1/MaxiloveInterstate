@@ -38,6 +38,11 @@ public class SpawnManager : MonoBehaviour
 
     public static SpawnManager Instance = null;
 
+    public int GetWave()
+    {
+        return wave;
+    }
+
     private void Awake()
     {
         Instance = this;
@@ -128,10 +133,10 @@ public class SpawnManager : MonoBehaviour
 
     void Spawn()
     {
+        wave++;
+
         if (TutoWave == TutorialWaves.Length)
         {
-            wave++;
-
             var x = Random.value;
 
             if(CanSpawnVeryHard && (1-x) <= VeryHardSpawnChance)
