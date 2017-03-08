@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 
 public class PropertyManager : MonoBehaviour
 {
+    private RectTransform[] rectToggles;
     public float[] Cooldowns;
 
     public Toggle[] toggles;
@@ -13,12 +15,18 @@ public class PropertyManager : MonoBehaviour
 
     public Text[] Numbers;
 
-    private void Awake()
+    private bool[] isUp;
+
+    private void Start()
     {
+        rectToggles = new RectTransform[toggles.Length];
+        isUp = new bool[4];
         wcToggles = new WeaponCooldown[toggles.Length];
         for(int i=0; i<wcToggles.Length; i++)
         {
             wcToggles[i] = toggles[i].GetComponent<WeaponCooldown>();
+            rectToggles[i] = toggles[i].GetComponent<RectTransform>();
+            isUp[i] = false;
         }
         AmmoProperties.InitUpgrades(Cooldowns[0]);
         UpdateToggles();
@@ -95,6 +103,66 @@ public class PropertyManager : MonoBehaviour
         else
         {
             wcToggles[3].Disable();
+        }
+    }
+
+    public void ScaleToggle(float scale)
+    {
+        if(AmmoProperties.SplitNb > 0 || rectToggles[0].localScale.x > .5f)
+        {
+            DOVirtual.Float(rectToggles[0].localScale.y, scale, .25f * Time.timeScale, (float y) => rectToggles[0].localScale = new Vector3(y, y, 0));
+        }
+
+        if(AmmoProperties.ExplosiveNb > 0 || rectToggles[1].localScale.x > .5f)
+        {
+            DOVirtual.Float(rectToggles[1].localScale.y, scale, .25f * Time.timeScale, (float y) => rectToggles[1].localScale = new Vector3(y, y, 0));
+        }
+
+        if(AmmoProperties.PiercingNb > 0 || rectToggles[2].localScale.x > .5f)
+        {
+            DOVirtual.Float(rectToggles[2].localScale.y, scale, .25f * Time.timeScale, (float y) => rectToggles[2].localScale = new Vector3(y, y, 0));
+        }
+
+        if(AmmoProperties.HomingNb > 0 || rectToggles[3].localScale.x > .5f)
+        {
+            DOVirtual.Float(rectToggles[3].localScale.y, scale, .25f * Time.timeScale, (float y) => rectToggles[3].localScale = new Vector3(y, y, 0));
+        }
+    }
+
+    public void MoveToggle(float move)
+    {
+        if (AmmoProperties.SplitNb > 0 || rectToggles[0].anchoredPosition.y > -70)
+        {
+            DOVirtual.Float(rectToggles[0].anchoredPosition.y, move, .25f * Time.timeScale, (float y) => rectToggles[0].anchoredPosition = new Vector3(rectToggles[0].anchoredPosition.x, y, 0));
+        }
+
+        if (AmmoProperties.ExplosiveNb > 0 || rectToggles[1].anchoredPosition.y > -70)
+        {
+            DOVirtual.Float(rectToggles[1].anchoredPosition.y, move, .25f * Time.timeScale, (float y) => rectToggles[1].anchoredPosition = new Vector3(rectToggles[1].anchoredPosition.x, y, 0));
+        }
+
+        if (AmmoProperties.PiercingNb > 0 || rectToggles[2].anchoredPosition.y > -70)
+        {
+            DOVirtual.Float(rectToggles[2].anchoredPosition.y, move, .25f * Time.timeScale, (float y) => rectToggles[2].anchoredPosition = new Vector3(rectToggles[2].anchoredPosition.x, y, 0));
+        }
+
+        if (AmmoProperties.HomingNb > 0 || rectToggles[3].anchoredPosition.y > -70)
+        {
+            DOVirtual.Float(rectToggles[3].anchoredPosition.y, move, .25f * Time.timeScale, (float y) => rectToggles[3].anchoredPosition = new Vector3(rectToggles[3].anchoredPosition.x, y, 0));
+        }
+    }
+
+    public void TriggerSwell(bool trigger)
+    {
+        if (trigger)
+        {
+            MoveToggle(0f);
+            ScaleToggle(1f);
+        }
+        else
+        {
+            MoveToggle(-70f);
+            ScaleToggle(.5f);
         }
     }
 

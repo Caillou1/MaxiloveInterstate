@@ -45,11 +45,14 @@ public class WeaponCooldown : MonoBehaviour {
 
     public void Enable()
     {
-        toggle.interactable = true;
-        isDisabled = false;
-        isAvailable = true;
-        isToggled = false;
-        UpdateSprite();
+        if (!isToggled)
+        {
+            toggle.interactable = true;
+            isDisabled = false;
+            isAvailable = true;
+            isToggled = false;
+            UpdateSprite();
+        }
     }
 
     public void Toggle()
@@ -124,6 +127,7 @@ public class WeaponCooldown : MonoBehaviour {
         }
         else
         {
+            isToggled = false;
             Enable();
         }
     }
