@@ -84,6 +84,11 @@ public class GameManager : MonoBehaviour {
             SpawnManager.Instance.SetSpawnHard();
         }
 
+        if(Score >= SpawnManager.Instance.MinimumScoreBeforeVeryHard)
+        {
+            SpawnManager.Instance.SetSpawnVeryHard();
+        }
+
         NotYetAddedScore = 0;
         ScoreMultiplier = 0;
     }
