@@ -161,7 +161,6 @@ public class PlayerController : MonoBehaviour {
                   if (tf != null) pos = new Vector3(x, tf.position.y, tf.position.z);
               });
         } else {
-            //FPSText.text = "";
             if (isFiring)
             {
                 CheckRect.localScale = new Vector3(1f, 1f, 1);

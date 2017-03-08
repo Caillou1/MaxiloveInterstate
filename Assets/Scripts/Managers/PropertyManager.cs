@@ -206,9 +206,12 @@ public class PropertyManager : MonoBehaviour
     {
         LSD.Trigger(true);
         yield return new WaitForSeconds(10f);
-        if (AddLSD <= 1)
-            LSD.Trigger(false);
         AddLSD--;
+        if (AddLSD <= 1)
+        {
+            LSD.Trigger(false);
+            AddLSD = 0;
+        }
     }
 
     private IEnumerator StartAchievementCountdown()
