@@ -59,6 +59,8 @@ public class PlayerController : MonoBehaviour {
 
     private Canvas canvas;
 
+    private IEnumerator ralenti;
+
     void Start () {
         eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
         CanScaleUp = true;
@@ -87,6 +89,7 @@ public class PlayerController : MonoBehaviour {
         canvas = GameObject.Find("CanvasUI").GetComponent<Canvas>();
         StartCoroutine(WaitForAchievement());
         StartCoroutine(WaitForLowFPS());
+        ralenti = null;
     }
 
     IEnumerator WaitForAchievement()
@@ -177,7 +180,12 @@ public class PlayerController : MonoBehaviour {
                     DOVirtual.Float(highpass.cutoffFrequency, 5000, .5f, (float x) => { highpass.cutoffFrequency = x; highpassVan.cutoffFrequency = x; });
                     DOVirtual.Float(postEffect.vigneting, .5f, .5f, (float x) => postEffect.vigneting = x);
                     //SoundManager.Instance.SetPitch();
-                    StartCoroutine(TriggerScaleUp());
+                    if (ralenti != null)
+                    {
+                        StopCoroutine(ralenti);
+                    }
+                    ralenti = TriggerScaleUp();
+                    StartCoroutine(ralenti);
                 }
             }
         }
@@ -201,6 +209,7 @@ public class PlayerController : MonoBehaviour {
             DOVirtual.Float(postEffect.vigneting, 0, .25f, (float x) => postEffect.vigneting = x);
         }
         CanScaleUp = true;
+        ralenti = null;
     }
 
     void SpawnBullet()
