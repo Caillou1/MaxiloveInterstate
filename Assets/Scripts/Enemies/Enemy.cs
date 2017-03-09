@@ -43,12 +43,16 @@ public abstract class Enemy : MonoBehaviour {
     private GameObject Life;
     private GameObject[] PowerUps;
 
+    private CameraShake camShake;
+
     void Start () {
         Init();
 	}
 
     protected void Init()
     {
+
+        camShake = GameObject.Find("CameraContainer").GetComponent<CameraShake>();
         SpawnManager.Instance.Register(gameObject);
         CanMove = false;
         CanBeHurt = false;
@@ -121,6 +125,7 @@ public abstract class Enemy : MonoBehaviour {
 
     protected void Peace()
     {
+        camShake.StartShake(0.1f);
         StopAllCoroutines();
         AmplitudeData.Instance.EnemiesKilled++;
         SpawnManager.Instance.Unregister(gameObject);

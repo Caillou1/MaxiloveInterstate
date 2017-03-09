@@ -27,16 +27,16 @@ public static class AmmoProperties {
         switch (power)
         {
             case Power.Explosive:
-                AmmoProperties.ExplosiveNb++;
+                AmmoProperties.ExplosiveNb = 1;
                 break;
             case Power.Homing:
-                AmmoProperties.HomingNb++;
+                AmmoProperties.HomingNb = 1;
                 break;
             case Power.Piercing:
-                AmmoProperties.PiercingNb++;
+                AmmoProperties.PiercingNb = 1;
                 break;
             case Power.Split:
-                AmmoProperties.SplitNb++;
+                AmmoProperties.SplitNb = 1;
                 break;
         }
     }
