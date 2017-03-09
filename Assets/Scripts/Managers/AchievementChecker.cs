@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class AchievementChecker : MonoBehaviour {
-    public GameObject[] AchievementsChecked;
+    public Text[] AchievementsChecked;
 
 	public void Check()
     {
@@ -12,7 +12,7 @@ public class AchievementChecker : MonoBehaviour {
         {
             if(PlayerPrefs.GetInt("Ach"+i, 0) == 1)
             {
-                AchievementsChecked[i].SetActive(true);
+                AchievementsChecked[i].color = Color.green;
             }
         }
     }
