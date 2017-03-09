@@ -60,6 +60,7 @@ public class PlayerController : MonoBehaviour {
     private Canvas canvas;
 
     private IEnumerator ralenti;
+    private IEnumerator fps;
 
     void Start () {
         eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
@@ -88,7 +89,8 @@ public class PlayerController : MonoBehaviour {
         HasLostLife = false;
         canvas = GameObject.Find("CanvasUI").GetComponent<Canvas>();
         StartCoroutine(WaitForAchievement());
-        StartCoroutine(WaitForLowFPS());
+        fps = WaitForLowFPS();
+        StartCoroutine(fps);
         ralenti = null;
     }
 
@@ -243,6 +245,7 @@ public class PlayerController : MonoBehaviour {
 
     IEnumerator GameOver()
     {
+        StopCoroutine(fps);
         CanScaleUp = false;
         if(GameManager.Instance.GetScore() >= 300000)
         {
