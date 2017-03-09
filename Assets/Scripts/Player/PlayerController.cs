@@ -92,7 +92,7 @@ public class PlayerController : MonoBehaviour {
     IEnumerator WaitForAchievement()
     {
         yield return new WaitForSeconds(1);
-        yield return new WaitUntil(() => GameManager.Instance.GetScore()>= 5000);
+        yield return new WaitUntil(() => GameManager.Instance.GetScore()>= 150000);
         if (!HasLostLife)
         {
             AchievementManager.Instance.UnlockAchievement(3);
@@ -234,7 +234,7 @@ public class PlayerController : MonoBehaviour {
 
     IEnumerator GameOver()
     {
-        if(GameManager.Instance.GetScore() >= 7000)
+        if(GameManager.Instance.GetScore() >= 300000)
         {
             AchievementManager.Instance.UnlockAchievement(2);
         }
