@@ -27,6 +27,18 @@ public class CameraShake : MonoBehaviour {
 		StartCoroutine (currentShakeCoroutine);
 	}
 
+    public void StartShake(float strength)
+    {
+        if(currentShakeCoroutine != null)
+        {
+            StopCoroutine(currentShakeCoroutine);
+        }
+        var newProperties = testProperties;
+        newProperties.strength = strength;
+        currentShakeCoroutine = Shake(newProperties);
+        StartCoroutine(currentShakeCoroutine);
+    }
+
 	IEnumerator Shake(Properties properties) {
 		float completionPercent = 0;
 		float movePercent = 0;

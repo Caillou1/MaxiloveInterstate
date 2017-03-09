@@ -234,6 +234,7 @@ public class PlayerController : MonoBehaviour {
 
     IEnumerator GameOver()
     {
+        CanScaleUp = false;
         if(GameManager.Instance.GetScore() >= 300000)
         {
             AchievementManager.Instance.UnlockAchievement(2);
