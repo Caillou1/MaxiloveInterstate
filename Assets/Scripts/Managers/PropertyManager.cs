@@ -23,6 +23,9 @@ public class PropertyManager : MonoBehaviour
 
     public static PropertyManager Instance = null;
 
+    private Tweener[] ScaleTweens;
+    private Tweener[] MoveTweens;
+
 
     private int AddLSD;
 
@@ -32,7 +35,11 @@ public class PropertyManager : MonoBehaviour
         rectToggles = new RectTransform[toggles.Length];
         isUp = new bool[4];
         wcToggles = new WeaponCooldown[toggles.Length];
-        for(int i=0; i<wcToggles.Length; i++)
+
+        ScaleTweens = new Tweener[4];
+        MoveTweens = new Tweener[4];
+
+        for (int i=0; i<wcToggles.Length; i++)
         {
             wcToggles[i] = toggles[i].GetComponent<WeaponCooldown>();
             rectToggles[i] = toggles[i].GetComponent<RectTransform>();
@@ -121,47 +128,53 @@ public class PropertyManager : MonoBehaviour
 
     public void ScaleToggle(float scale)
     {
+        foreach (var t in ScaleTweens)
+            t.Kill();
+
         if(AmmoProperties.SplitNb > 0 || rectToggles[0].localScale.x > .5f)
         {
-            DOVirtual.Float(rectToggles[0].localScale.y, scale, .25f * Time.timeScale, (float y) => rectToggles[0].localScale = new Vector3(y, y, 0));
+            ScaleTweens[0] = DOVirtual.Float(rectToggles[0].localScale.y, scale, .125f * Time.timeScale, (float y) => rectToggles[0].localScale = new Vector3(y, y, 0));
         }
 
         if(AmmoProperties.ExplosiveNb > 0 || rectToggles[1].localScale.x > .5f)
         {
-            DOVirtual.Float(rectToggles[1].localScale.y, scale, .25f * Time.timeScale, (float y) => rectToggles[1].localScale = new Vector3(y, y, 0));
+            ScaleTweens[1] = DOVirtual.Float(rectToggles[1].localScale.y, scale, .125f * Time.timeScale, (float y) => rectToggles[1].localScale = new Vector3(y, y, 0));
         }
 
         if(AmmoProperties.PiercingNb > 0 || rectToggles[2].localScale.x > .5f)
         {
-            DOVirtual.Float(rectToggles[2].localScale.y, scale, .25f * Time.timeScale, (float y) => rectToggles[2].localScale = new Vector3(y, y, 0));
+            ScaleTweens[2] = DOVirtual.Float(rectToggles[2].localScale.y, scale, .125f * Time.timeScale, (float y) => rectToggles[2].localScale = new Vector3(y, y, 0));
         }
 
         if(AmmoProperties.HomingNb > 0 || rectToggles[3].localScale.x > .5f)
         {
-            DOVirtual.Float(rectToggles[3].localScale.y, scale, .25f * Time.timeScale, (float y) => rectToggles[3].localScale = new Vector3(y, y, 0));
+            ScaleTweens[3] = DOVirtual.Float(rectToggles[3].localScale.y, scale, .125f * Time.timeScale, (float y) => rectToggles[3].localScale = new Vector3(y, y, 0));
         }
     }
 
     public void MoveToggle(float move)
     {
+        foreach (var t in MoveTweens)
+            t.Kill();
+
         if (AmmoProperties.SplitNb > 0 || rectToggles[0].anchoredPosition.y > -70)
         {
-            DOVirtual.Float(rectToggles[0].anchoredPosition.y, move, .25f * Time.timeScale, (float y) => rectToggles[0].anchoredPosition = new Vector3(rectToggles[0].anchoredPosition.x, y, 0));
+            MoveTweens[0] = DOVirtual.Float(rectToggles[0].anchoredPosition.y, move, .125f * Time.timeScale, (float y) => rectToggles[0].anchoredPosition = new Vector3(rectToggles[0].anchoredPosition.x, y, 0));
         }
 
         if (AmmoProperties.ExplosiveNb > 0 || rectToggles[1].anchoredPosition.y > -70)
         {
-            DOVirtual.Float(rectToggles[1].anchoredPosition.y, move, .25f * Time.timeScale, (float y) => rectToggles[1].anchoredPosition = new Vector3(rectToggles[1].anchoredPosition.x, y, 0));
+            MoveTweens[1] = DOVirtual.Float(rectToggles[1].anchoredPosition.y, move, .125f * Time.timeScale, (float y) => rectToggles[1].anchoredPosition = new Vector3(rectToggles[1].anchoredPosition.x, y, 0));
         }
 
         if (AmmoProperties.PiercingNb > 0 || rectToggles[2].anchoredPosition.y > -70)
         {
-            DOVirtual.Float(rectToggles[2].anchoredPosition.y, move, .25f * Time.timeScale, (float y) => rectToggles[2].anchoredPosition = new Vector3(rectToggles[2].anchoredPosition.x, y, 0));
+            MoveTweens[2] = DOVirtual.Float(rectToggles[2].anchoredPosition.y, move, .125f * Time.timeScale, (float y) => rectToggles[2].anchoredPosition = new Vector3(rectToggles[2].anchoredPosition.x, y, 0));
         }
 
         if (AmmoProperties.HomingNb > 0 || rectToggles[3].anchoredPosition.y > -70)
         {
-            DOVirtual.Float(rectToggles[3].anchoredPosition.y, move, .25f * Time.timeScale, (float y) => rectToggles[3].anchoredPosition = new Vector3(rectToggles[3].anchoredPosition.x, y, 0));
+            MoveTweens[3] = DOVirtual.Float(rectToggles[3].anchoredPosition.y, move, .125f * Time.timeScale, (float y) => rectToggles[3].anchoredPosition = new Vector3(rectToggles[3].anchoredPosition.x, y, 0));
         }
     }
 

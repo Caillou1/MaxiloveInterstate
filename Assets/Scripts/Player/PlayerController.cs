@@ -49,8 +49,8 @@ public class PlayerController : MonoBehaviour {
 
     public static PlayerController Instance;
 
-    public AudioHighPassFilter highpass;
-    private AudioHighPassFilter highpassVan;
+    public AudioLowPassFilter highpass;
+    private AudioLowPassFilter highpassVan;
 
     private EventSystem eventSystem;
     private bool HasLostLife;
@@ -61,6 +61,9 @@ public class PlayerController : MonoBehaviour {
 
     private IEnumerator ralenti;
     private IEnumerator fps;
+
+    private Tweener Vignet;
+    private Tweener Highpass;
 
     void Start () {
         eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
@@ -84,7 +87,7 @@ public class PlayerController : MonoBehaviour {
         Destruction = tf.FindChild("Destruction").GetComponent<ParticleSystem>();
         BusTex = tf.FindChild("Mesh").transform.FindChild("Sk").GetComponent<SkinnedMeshRenderer>();
         FPSText = GameObject.Find("_FPSTEXT_").GetComponent<Text>();
-        highpassVan = GetComponent<AudioHighPassFilter>();
+        highpassVan = GetComponent<AudioLowPassFilter>();
         postEffect = cam.GetComponent<PostEffect>();
         HasLostLife = false;
         canvas = GameObject.Find("CanvasUI").GetComponent<Canvas>();
@@ -92,6 +95,10 @@ public class PlayerController : MonoBehaviour {
         fps = WaitForLowFPS();
         StartCoroutine(fps);
         ralenti = null;
+        Highpass = null;
+        Vignet = null;
+
+        highpass = SoundManager.Instance.GetComponent<AudioLowPassFilter>();
     }
 
     IEnumerator WaitForAchievement()
@@ -152,9 +159,14 @@ public class PlayerController : MonoBehaviour {
                 if (!IsPaused && Ralenti)
                 {
                     Time.timeScale = 1; // DOVirtual.Float(Time.timeScale, 1f, 1f, (float t) => Time.timeScale = t);
-                    //SoundManager.Instance.SetPitch();
-                    DOVirtual.Float(highpass.cutoffFrequency, 10, .5f, (float x) => { highpass.cutoffFrequency = x; highpassVan.cutoffFrequency = x; });
-                    DOVirtual.Float(postEffect.vigneting, 0, .5f, (float x) => postEffect.vigneting = x);
+                                        //SoundManager.Instance.SetPitch();
+
+                    if (Highpass == null)
+                        Highpass.Kill();
+                    if (Vignet != null)
+                        Vignet.Kill();
+                    Highpass = DOVirtual.Float(highpass.cutoffFrequency, 22000, .5f * Time.timeScale, (float x) => { highpass.cutoffFrequency = x; highpassVan.cutoffFrequency = x; });
+                    Vignet = DOVirtual.Float(postEffect.vigneting, 0, .5f * Time.timeScale, (float x) => postEffect.vigneting = x);
                 }
             }
             float from = pos.x;
@@ -179,8 +191,12 @@ public class PlayerController : MonoBehaviour {
                 if (!IsPaused && Ralenti)
                 {
                     Time.timeScale = ValeurRalenti;
-                    DOVirtual.Float(highpass.cutoffFrequency, 5000, .5f, (float x) => { highpass.cutoffFrequency = x; highpassVan.cutoffFrequency = x; });
-                    DOVirtual.Float(postEffect.vigneting, .5f, .5f, (float x) => postEffect.vigneting = x);
+                    if (Highpass == null)
+                        Highpass.Kill();
+                    if (Vignet != null)
+                        Vignet.Kill();
+                    Highpass = DOVirtual.Float(highpass.cutoffFrequency, 1000, .5f * Time.timeScale, (float x) => { highpass.cutoffFrequency = x; highpassVan.cutoffFrequency = x; });
+                    Vignet = DOVirtual.Float(postEffect.vigneting, .5f, .5f * Time.timeScale, (float x) => postEffect.vigneting = x);
                     //SoundManager.Instance.SetPitch();
                     if (ralenti != null)
                     {
@@ -201,13 +217,18 @@ public class PlayerController : MonoBehaviour {
         StopCoroutine(TriggerScaleUp());
     }
 
+    public void SetPause(bool b)
+    {
+        IsPaused = b;
+    }
+
     IEnumerator TriggerScaleUp()
     {
         yield return new WaitForSecondsRealtime(5);
         if (CanScaleUp)
         {
             Time.timeScale = 1;
-            DOVirtual.Float(highpass.cutoffFrequency, 10, .25f, (float x) => { highpass.cutoffFrequency = x; highpassVan.cutoffFrequency = x; });
+            DOVirtual.Float(highpass.cutoffFrequency, 22000, .25f, (float x) => { highpass.cutoffFrequency = x; highpassVan.cutoffFrequency = x; });
             DOVirtual.Float(postEffect.vigneting, 0, .25f, (float x) => postEffect.vigneting = x);
         }
         CanScaleUp = true;
@@ -246,6 +267,8 @@ public class PlayerController : MonoBehaviour {
     IEnumerator GameOver()
     {
         StopCoroutine(fps);
+        GetComponent<AudioSource>().Stop();
+        SoundManager.Instance.StopMusic();
         CanScaleUp = false;
         if(GameManager.Instance.GetScore() >= 300000)
         {

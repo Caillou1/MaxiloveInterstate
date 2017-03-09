@@ -37,6 +37,8 @@ public class SpawnManager : MonoBehaviour
 
     public static SpawnManager Instance = null;
 
+    private ColorModulator colorMod;
+
     public int GetWave()
     {
         return wave;
@@ -50,6 +52,8 @@ public class SpawnManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+
+        colorMod = GameObject.Find("DifficultyImage").GetComponent<ColorModulator>();
 
         NotSeenEasyWaves = new List<int>();
         NotSeenMediumWaves = new List<int>();
@@ -139,7 +143,11 @@ public class SpawnManager : MonoBehaviour
 
     public void SetSpawnVeryHard()
     {
-        CanSpawnVeryHard = true;
+        if (!CanSpawnVeryHard)
+        {
+            CanSpawnVeryHard = true;
+            colorMod.Appear(3);
+        }
     }
 
     void Spawn()
@@ -147,7 +155,10 @@ public class SpawnManager : MonoBehaviour
         wave++;
         var x = Random.value;
 
-        if(CanSpawnVeryHard && (1-x) <= VeryHardSpawnChance)
+        if(wave == 35 || wave == 45)
+            colorMod.Appear(3);
+
+        if (CanSpawnVeryHard && (1-x) <= VeryHardSpawnChance)
         {
             SoundManager.Instance.PlaySpawnTank();
             if (NotSeenVeryHardWaves.Count == 0)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class ColorModulator : MonoBehaviour {
 
@@ -19,7 +20,23 @@ public class ColorModulator : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        t+=speed;
+        t+=speed*Time.unscaledDeltaTime;
         mImage.color = colors.Evaluate((Mathf.Sin(t)+1)/2);	
 	}
+
+    public void Appear(float time)
+    {
+        StartCoroutine(Disappear(time));
+    }
+
+    IEnumerator Disappear(float time)
+    {
+        mImage.color = Color.clear;
+        mImage.enabled = true;
+        DOVirtual.Float(0, 1, 1, (float x) => mImage.color = new Color(mImage.color.r, mImage.color.g, mImage.color.b, x));
+        yield return new WaitForSeconds(time);
+        DOVirtual.Float(1, 0, 1, (float x) => mImage.color = new Color(mImage.color.r, mImage.color.g, mImage.color.b, x));
+        yield return new WaitForSeconds(1);
+        mImage.enabled = false;
+    }
 }

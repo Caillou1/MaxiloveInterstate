@@ -20,6 +20,11 @@ public class AchievementManager : MonoBehaviour {
 
     public void UnlockAchievement(int i)
     {
-        //PlayerPrefs.SetInt("Ach" + i, 1);
+        if (PlayerPrefs.GetInt("Ach" + i, 0) == 0)
+        {
+            Debug.Log("Unlocked " + i + " !");
+            PlayerPrefs.SetInt("Ach" + i, 1);
+            AmplitudeHelper.Instance.LogEvent("Achievement " + i + " unlocked");
+        }
     }
 }

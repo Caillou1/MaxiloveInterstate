@@ -36,7 +36,7 @@ public abstract class Enemy : MonoBehaviour {
 
     //Particles
     private ParticleSystem Trail;
-    private ParticleSystem TrailPeace;
+    private GameObject TrailPeace;
     private ParticleSystem Hit;
     private ParticleSystem Pacification;
 
@@ -68,16 +68,19 @@ public abstract class Enemy : MonoBehaviour {
         if (graphs != null)
         {
             Trail = graphs.FindChild("Trail").GetComponent<ParticleSystem>();
-            TrailPeace = graphs.FindChild("TrailPeace").GetComponent<ParticleSystem>();
+            TrailPeace = graphs.FindChild("TrailPeace").gameObject;
             Hit = graphs.FindChild("Hit").GetComponent<ParticleSystem>();
             Pacification = graphs.FindChild("Peace").GetComponent<ParticleSystem>();
         } else
         {
             Trail = tf.FindChild("Trail").GetComponent<ParticleSystem>();
-            TrailPeace = tf.FindChild("TrailPeace").GetComponent<ParticleSystem>();
+            TrailPeace = tf.FindChild("TrailPeace").gameObject;
             Hit = tf.FindChild("Hit").GetComponent<ParticleSystem>();
             Pacification = tf.FindChild("Peace").GetComponent<ParticleSystem>();
         }
+
+        TrailPeace.SetActive(false);
+
         var tmp = tf.GetComponentsInChildren<MeshRenderer>();
         InitialsMaterial = new Material[tmp.Length];
         for(int i = 0; i<tmp.Length; i++)
@@ -145,7 +148,7 @@ public abstract class Enemy : MonoBehaviour {
         CanFire = false;
         CanBeHurt = false;
         Trail.Stop(true);
-        TrailPeace.Play(true);
+        TrailPeace.SetActive(true);
         Pacification.Play(true);
         Destroy(Pacification.gameObject, 5);
         Pacification.transform.localPosition = Vector3.zero;
@@ -179,7 +182,7 @@ public abstract class Enemy : MonoBehaviour {
 
     protected void DropLife()
     {
-        if(SpawnManager.Instance.GetWave() <= 35 && Random.value <= DropLifeChance)
+        if(SpawnManager.Instance.GetWave() <= 35 && PowerDropped == Power.NONE && Random.value <= DropLifeChance)
         {
             Instantiate(Life, tf.position - new Vector3(0, 0, 0.1f), Quaternion.identity);
         }

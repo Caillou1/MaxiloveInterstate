@@ -64,7 +64,7 @@ public class GameOverUI : MonoBehaviour {
 
 		timer += Time.unscaledDeltaTime;
 
-        scoreTxt.text = "Score\n" + GameManager.Instance.GetScore();
+        scoreTxt.text = ""+GameManager.Instance.GetScore();
         inGameScore.enabled = false;
 
 		float fadePercent = timer / fadeTime;

@@ -11,7 +11,7 @@ public class MediumEnemy : Enemy
     protected override void Shot(bool ignoreRandom)
     {
         if (CanFire) {
-            SoundManager.Instance.PlayTirVoiture();
+            //SoundManager.Instance.PlayTirVoiture();
             float minDeg = 90 + (180 - AngleOfWave) / 2;
             float maxDeg = 270 - (180 - AngleOfWave) / 2;
             float deg = 0;

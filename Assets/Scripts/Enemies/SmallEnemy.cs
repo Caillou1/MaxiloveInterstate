@@ -13,7 +13,7 @@ public class SmallEnemy : Enemy {
 
             float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
             Instantiate(Bullet, tf.position - new Vector3(0, 0, 0.05f), Quaternion.Euler(0f, 0f, rot_z + 90));
-            SoundManager.Instance.PlayTirMoto();
+            //SoundManager.Instance.PlayTirMoto();
         }
     }
 	

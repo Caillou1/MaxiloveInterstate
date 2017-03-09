@@ -40,7 +40,7 @@ public class BigEnemy : Enemy
     {
         yield return new WaitForSeconds(time);
 
-        SoundManager.Instance.PlayTirTank();
+        //SoundManager.Instance.PlayTirTank();
         float minDeg = 90 + (180 - AngleOfWave) / 2;
         float maxDeg = 270 - (180 - AngleOfWave) / 2;
         float deg = 0;
